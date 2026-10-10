@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>生工2601B 电动车违停值班安排</title>
+<style>
+  :root{
+    --bg:#f5f5f7;--text:#1d1d1f;--muted:#6e6e73;--line:#e6e6eb;--card:#fff;
+    --blue:#0b62c4;--orange:#c2410c;--green:#0f7a5a;--purple:#5b3ec8;--accent:#0071e3;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:940px;margin:0 auto;padding:0 16px 60px}
+  .hero{padding:38px 0 20px;text-align:center}
+  .kicker{margin:0;font-size:12.5px;font-weight:600;letter-spacing:.08em;color:var(--accent);text-transform:uppercase}
+  h1{margin:8px 0 6px;font-size:29px;letter-spacing:-.02em}
+  .sub{margin:0;color:var(--muted);font-size:14.5px}
+  .stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .stat{background:var(--card);border-radius:14px;padding:10px 18px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+  .stat b{display:block;font-size:19px;letter-spacing:-.01em}
+  .stat span{font-size:12px;color:var(--muted)}
+  .tabs{position:sticky;top:0;z-index:30;padding:10px 0;background:rgba(245,245,247,.88);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px)}
+  .seg{display:flex;gap:2px;justify-content:center;background:#e9e9ee;border-radius:12px;padding:3px;width:max-content;margin:0 auto}
+  .tab{border:0;background:transparent;color:#3a3a3c;font:500 15px/1 inherit;padding:9px 18px;border-radius:10px;cursor:pointer;transition:background .15s}
+  .tab.is-active{background:#fff;color:#000;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .searchbar{display:flex;align-items:center;gap:8px;margin:18px 0;background:var(--card);border-radius:14px;
+    padding:4px 6px 4px 14px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+  .searchbar svg{flex:none;opacity:.45}
+  .searchbar input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:16px/1.4 inherit;padding:11px 0;color:var(--text)}
+  .clear{border:0;background:#f0f0f5;color:#3a3a3c;font:13px/1 inherit;padding:8px 12px;border-radius:10px;cursor:pointer}
+  .view{display:none}
+  .view.is-active{display:block;animation:fade .22s ease-out}
+  @keyframes fade{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+  .hint{margin:0 0 14px;color:var(--muted);font-size:13.5px}
+  table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);border-radius:18px;
+    overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+  th{font:600 12.5px/1.3 inherit;color:var(--muted);text-align:left;padding:14px 12px;background:#fbfbfd;border-bottom:1px solid var(--line)}
+  td{padding:14px 12px;border-bottom:1px solid var(--line);font-size:14.5px;vertical-align:middle}
+  table.sched th,table.sched td{white-space:nowrap}
+  tbody tr:last-child td{border-bottom:0}
+  tr.match{background:#f2f8ff}
+  tr.dim{opacity:.28}
+  .wk{display:inline-block;font-weight:700;font-size:13.5px;color:#0b62c4;background:#e8f2ff;border-radius:999px;padding:4px 11px;white-space:nowrap}
+  .who{font-weight:600}
+  .who.committee{color:#0b62c4}
+  .gate{display:block;font-size:11.5px;color:var(--muted);margin-bottom:1px}
+  .cards{display:none}
+  .card{background:var(--card);border-radius:16px;padding:15px 16px;box-shadow:0 1px 2px rgba(0,0,0,.05);margin-bottom:12px}
+  .card .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+  .chip{display:inline-block;font:600 12px/1 inherit;padding:5px 10px;border-radius:999px;background:#eef0f4;color:#3a3a3c;white-space:nowrap}
+  .chip.zao{background:#e8f2ff;color:var(--blue)}
+  .chip.shang{background:#fff0e6;color:var(--orange)}
+  .chip.wu{background:#e6f6ef;color:var(--green)}
+  .chip.xia{background:#f0ecff;color:var(--purple)}
+  .card .t{color:var(--muted);font-size:13px;margin-bottom:8px}
+  .card .line{font-size:14.5px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:12px}
+  .person{background:var(--card);border-radius:16px;padding:15px 16px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+  .person.dim{opacity:.3}
+  .p-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .p-name{font-size:17px;font-weight:700;letter-spacing:-.01em}
+  .badge{font:600 11.5px/1 inherit;padding:4px 9px;border-radius:999px;background:#fff3d6;color:#8a5a00}
+  .p-count{margin-left:auto;font-size:12.5px;color:var(--muted)}
+  .p-list{margin:10px 0 0;padding:0;list-style:none}
+  .p-list li{display:flex;gap:8px;align-items:baseline;font-size:14px;padding:6px 0;border-top:1px solid #f1f1f5}
+  .p-list li:first-child{border-top:0}
+  .p-list .w{font-weight:600;color:#0b62c4;min-width:62px}
+  .p-list .d{color:var(--muted);min-width:74px}
+  .p-list .k{font-weight:600}
+  .sec{background:var(--card);border-radius:18px;padding:18px 20px;box-shadow:0 1px 2px rgba(0,0,0,.05);margin-bottom:14px}
+  .sec h2{margin:0 0 12px;font-size:17px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+  .sec h2 .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none}
+  .sec ol,.sec ul{margin:0;padding-left:20px}
+  .sec li{margin:7px 0;font-size:14.5px}
+  .times{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:4px}
+  .tbox{border:1px solid var(--line);border-radius:13px;padding:11px 13px}
+  .tbox b{display:block;font-size:14.5px;margin-bottom:3px}
+  .tbox span{font-size:13px;color:var(--muted)}
+  .comm{display:flex;flex-wrap:wrap;gap:8px}
+  .comm span{background:#f7f7fa;border-radius:999px;padding:6px 12px;font-size:13.5px}
+  .comm span b{font-weight:700}
+  .note{font-size:13px;color:var(--muted);line-height:1.6}
+  footer{margin-top:26px;text-align:center;color:#9a9aa0;font-size:12.5px;line-height:1.7}
+  @media (max-width:720px){
+    .hero{padding:26px 0 14px}h1{font-size:24px}
+    table.sched{display:none}
+    .cards{display:block}
+    .tab{padding:9px 13px;font-size:14px}
+  }
+  @media print{
+    body{background:#fff}
+    .tabs,.searchbar,.hint{display:none!important}
+    .view{display:block!important;animation:none!important}
+    .cards{display:none!important}
+    table.sched{display:table!important}
+    .sec,.card,.person{break-inside:avoid}
+    table.sched{break-inside:auto}
+    table.sched tr{break-inside:avoid}
+    table.sched thead{display:table-header-group}
+    .wrap{max-width:100%;padding:0}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <p class="kicker">2026-2027 学年 · 电动车违停值班</p>
+    <h1>生工2601B 值班安排</h1>
+    <p class="sub">全部班次都在 <b>南门</b> · 共 9 周、18 个班次 · 38 人全员参与</p>
+    <div class="stats">
+      <div class="stat"><b>9</b><span>周</span></div>
+      <div class="stat"><b>18</b><span>个班次</span></div>
+      <div class="stat"><b>38</b><span>人</span></div>
+      <div class="stat"><b>54</b><span>人次</span></div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <div class="seg">
+      <button class="tab is-active" data-view="schedule">班次总表</button>
+      <button class="tab" data-view="person">按人查</button>
+      <button class="tab" data-view="rules">值班要求</button>
+    </div>
+  </nav>
+
+  <div class="searchbar">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+    <input id="q" type="search" placeholder="输入姓名查我的班次，如：吴宇航" autocomplete="off">
+    <button class="clear" id="clear" hidden>清除</button>
+  </div>
+
+  <section class="view is-active" id="view-schedule">
+    <p class="hint">共 18 个班次，按周次排列。<b>上课间</b>＝上午第 1、2 节之间＋第 3、4 节之间；<b>下课间</b>＝下午第 5、6 节之间＋第 7、8 节之间。</p>
+    <table class="sched">
+      <thead>
+        <tr><th style="width:78px">周次</th><th style="width:76px">星期</th><th style="width:72px">班次</th><th style="width:200px">到岗时间</th><th style="width:118px">南门（1人）</th><th>北门（2人）</th></tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section class="view" id="view-person">
+    <p class="hint">每个人的所有班次都列在下面（按学号顺序）。也可以在上面输入姓名直接过滤。</p>
+    <div class="grid" id="people"></div>
+  </section>
+
+  <section class="view" id="view-rules">
+    <div class="sec">
+      <h2><span class="dot"></span>值班时间</h2>
+      <div class="times">
+        <div class="tbox"><b>早班</b><span>7:30 – 8:00</span></div>
+        <div class="tbox"><b>上课间</b><span>上午第 1、2 节之间，第 3、4 节之间</span></div>
+        <div class="tbox"><b>午班</b><span>14:00 – 14:30</span></div>
+        <div class="tbox"><b>下课间</b><span>下午第 5、6 节之间，第 7、8 节之间</span></div>
+      </div>
+      <p class="note" style="margin-top:12px">按时到岗，不迟到、不早退。</p>
+    </div>
+
+    <div class="sec">
+      <h2><span class="dot"></span>着装</h2>
+      <p class="note" style="font-size:14.5px;color:var(--text)">值班时请身穿<b>志愿服</b>——志愿服在 <b>104 进门右手边白色柜子</b>上。</p>
+    </div>
+
+    <div class="sec">
+      <h2><span class="dot"></span>值班流程</h2>
+      <ol>
+        <li>按班次时间巡查楼下停放的车辆，提醒同学把车停到<b>两边台阶上</b>、规范停放。</li>
+        <li>对不听从劝告的，到 <b>104 取锁</b>将车锁上；被锁车辆后续会进行<b>登记、扣分</b>。</li>
+        <li>锁用完后放回 <b>104 志愿部柜子</b>。</li>
+        <li>值班结束后，在 <b>104 桌子上的签到表</b>上签到。</li>
+      </ol>
+    </div>
+
+    <div class="sec">
+      <h2><span class="dot"></span>检查与后果</h2>
+      <p class="note" style="font-size:14.5px;color:var(--text)">学院会安排电瓶车停放检查。<b>值班工作不到位的，将取消该班次值班人员的志愿时长。</b></p>
+    </div>
+
+    <div class="sec">
+      <h2><span class="dot"></span>班委名单</h2>
+      <div class="comm" id="comm"></div>
+    </div>
+
+    <div class="sec">
+      <h2><span class="dot"></span>说明</h2>
+      <p class="note">
+        数据来源：学院《2026-2027学年违停值班表》2026-10-10 最终版，本页只保留生工2601B 的 18 个班次。<br>
+        第 18 周的两个班次（星期四上课间、星期五早班）在原表里属唯一一处不成规律的位置，如学院另有通知，以学院通知为准。<br>
+        上课间 / 下课间无确切钟点（按节次执行）；本页生成于 2026-10-10。
+      </p>
+    </div>
+  </section>
+
+  <footer>生工2601B · 电动车违停值班查询页 · 单文件，可离线打开</footer>
+</div>
+
+<script>
+const WEEKS = [{"week":7,"slots":[{"dayIdx":6,"day":"星期四","period":"早班","time":"7:30 – 8:00","cell":"F52","south":"吴宇航","north":["左文博","张佳琪"]},{"dayIdx":7,"day":"星期五","period":"午班","time":"14:00 – 14:30","cell":"G57","south":"王丽雅","north":["于军静","魏天欣"]}]},{"week":8,"slots":[{"dayIdx":3,"day":"星期一","period":"早班","time":"7:30 – 8:00","cell":"C62","south":"张子涵","north":["王俊淑","马睿"]},{"dayIdx":6,"day":"星期四","period":"下课间","time":"下午课间（5·6、7·8 节间）","cell":"F69","south":"王祺","north":["贾环瑜","丁淑贤"]}]},{"week":10,"slots":[{"dayIdx":6,"day":"星期四","period":"早班","time":"7:30 – 8:00","cell":"F82","south":"吴紫豪","north":["陈思燕","朱斐"]},{"dayIdx":7,"day":"星期五","period":"午班","time":"14:00 – 14:30","cell":"G87","south":"邹琪","north":["于明鑫","叶峥"]}]},{"week":11,"slots":[{"dayIdx":3,"day":"星期一","period":"早班","time":"7:30 – 8:00","cell":"C92","south":"田晨阳","north":["杨鑫","许炳樟"]},{"dayIdx":6,"day":"星期四","period":"下课间","time":"下午课间（5·6、7·8 节间）","cell":"F99","south":"黄子欣","north":["项子皓","王嘉颖"]}]},{"week":13,"slots":[{"dayIdx":6,"day":"星期四","period":"早班","time":"7:30 – 8:00","cell":"F112","south":"吴宇航","north":["唐海洋","宋洪阳"]},{"dayIdx":7,"day":"星期五","period":"午班","time":"14:00 – 14:30","cell":"G117","south":"王丽雅","north":["刘金鑫","林睿"]}]},{"week":14,"slots":[{"dayIdx":3,"day":"星期一","period":"早班","time":"7:30 – 8:00","cell":"C122","south":"张子涵","north":["李伟旺","李佳毅"]},{"dayIdx":6,"day":"星期四","period":"下课间","time":"下午课间（5·6、7·8 节间）","cell":"F129","south":"王祺","north":["黎松良","何心田"]}]},{"week":16,"slots":[{"dayIdx":6,"day":"星期四","period":"早班","time":"7:30 – 8:00","cell":"F142","south":"吴紫豪","north":["顾益豪","董睿喆"]},{"dayIdx":7,"day":"星期五","period":"午班","time":"14:00 – 14:30","cell":"G147","south":"邹琪","north":["仇国兵","陈政飞"]}]},{"week":17,"slots":[{"dayIdx":3,"day":"星期一","period":"早班","time":"7:30 – 8:00","cell":"C152","south":"田晨阳","north":["陈坤","敖绍毅"]},{"dayIdx":6,"day":"星期四","period":"下课间","time":"下午课间（5·6、7·8 节间）","cell":"F159","south":"黄子欣","north":["左文博","张佳琪"]}]},{"week":18,"slots":[{"dayIdx":6,"day":"星期四","period":"上课间","time":"上午课间（1·2、3·4 节间）","cell":"F164","south":"吴宇航","north":["于军静","魏天欣"]},{"dayIdx":7,"day":"星期五","period":"早班","time":"7:30 – 8:00","cell":"G162","south":"王丽雅","north":["王俊淑","马睿"]}]}];
+const ROSTER = ["左文博","邹琪","张子涵","张佳琪","于军静","魏天欣","王祺","王丽雅","王俊淑","马睿","贾环瑜","黄子欣","丁淑贤","陈思燕","朱斐","于明鑫","叶峥","杨鑫","许炳樟","项子皓","吴紫豪","吴宇航","王嘉颖","田晨阳","唐海洋","宋洪阳","刘金鑫","林睿","李伟旺","李佳毅","黎松良","何心田","顾益豪","董睿喆","仇国兵","陈政飞","陈坤","敖绍毅"];
+const COMMITTEE = {"吴宇航":"班长","王丽雅":"团支书","张子涵":"学委","王祺":"心委（女）","吴紫豪":"心委（男）","邹琪":"宣委","田晨阳":"生委","黄子欣":"组委"};
+
+const SLOT_CLASS = {"早班":"zao","上课间":"shang","午班":"wu","下课间":"xia"};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const nm = n => COMMITTEE[n] ? '<span class="who committee">' + esc(n) + '</span>' : '<span class="who">' + esc(n) + '</span>';
+
+/* ---------- 班次总表 ---------- */
+const tbody = document.getElementById("tbody");
+let html = "";
+WEEKS.forEach(w => {
+  w.slots.forEach((s, i) => {
+    html += "<tr data-names=\"" + esc([s.south].concat(s.north).join(",")) + "\">";
+    if (i === 0) html += '<td rowspan="' + w.slots.length + '"><span class="wk">第 ' + w.week + ' 周</span></td>';
+    html += "<td>" + s.day + "</td>";
+    html += '<td><span class="chip ' + SLOT_CLASS[s.period] + '">' + s.period + "</span></td>";
+    html += "<td>" + esc(s.time) + "</td>";
+    html += "<td>" + nm(s.south) + "</td>";
+    html += "<td>" + s.north.map(nm).join("&nbsp;&nbsp;") + "</td>";
+    html += "</tr>";
+  });
+});
+tbody.innerHTML = html;
+
+const cards = document.getElementById("cards");
+cards.innerHTML = WEEKS.map(w => w.slots.map(s =>
+  '<div class="card" data-names="' + esc([s.south].concat(s.north).join(",")) + '">' +
+    '<div class="top"><span class="wk">第 ' + w.week + ' 周</span>' +
+    '<span class="chip ' + SLOT_CLASS[s.period] + '">' + s.period + '</span>' +
+    '<span class="chip">' + s.day + '</span></div>' +
+    '<div class="t">' + esc(s.time) + '</div>' +
+    '<div class="line"><span class="gate">南门 1 人</span>' + nm(s.south) + '</div>' +
+    '<div class="line"><span class="gate">北门 2 人</span>' + s.north.map(nm).join("　") + '</div>' +
+  '</div>').join("")).join("");
+
+/* ---------- 按人查 ---------- */
+const dutiesOf = name => {
+  const out = [];
+  WEEKS.forEach(w => w.slots.forEach(s => {
+    if (s.south === name) out.push({w: w.week, day: s.day, period: s.period, time: s.time, gate: "南门"});
+    else if (s.north.indexOf(name) > -1) out.push({w: w.week, day: s.day, period: s.period, time: s.time, gate: "北门"});
+  }));
+  return out;
+};
+const people = document.getElementById("people");
+let ph = "";
+ROSTER.forEach(name => {
+  const ds = dutiesOf(name);
+  if (!ds.length) return;
+  ph += '<div class="person" data-name="' + esc(name) + '">' +
+    '<div class="p-head"><span class="p-name">' + esc(name) + '</span>' +
+    (COMMITTEE[name] ? '<span class="badge">' + esc(COMMITTEE[name]) + '</span>' : '') +
+    '<span class="p-count">' + ds.length + ' 个班次</span></div><ul class="p-list">' +
+    ds.map(d => '<li><span class="w">第 ' + d.w + ' 周</span><span class="d">' + d.day + '</span>' +
+      '<span class="k">' + d.period + ' · ' + d.gate + '</span></li>').join("") +
+    '</ul></div>';
+});
+people.innerHTML = ph;
+
+document.getElementById("comm").innerHTML = Object.keys(COMMITTEE).map(n =>
+  "<span>" + esc(n) + " · <b>" + esc(COMMITTEE[n]) + "</b></span>").join("");
+
+/* ---------- 视图切换 ---------- */
+const tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+const views = {schedule: "view-schedule", person: "view-person", rules: "view-rules"};
+function show(v, push) {
+  tabs.forEach(t => t.classList.toggle("is-active", t.dataset.view === v));
+  Object.keys(views).forEach(k => document.getElementById(views[k]).classList.toggle("is-active", k === v));
+  if (push) { try { history.replaceState(null, "", "#" + v); } catch (e) {} }
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+tabs.forEach(t => t.addEventListener("click", () => show(t.dataset.view, true)));
+show((location.hash || "").replace("#", "") in views ? (location.hash || "").replace("#", "") : "schedule", false);
+
+/* ---------- 搜索 ---------- */
+const q = document.getElementById("q"), clearBtn = document.getElementById("clear");
+function filter() {
+  const k = q.value.trim();
+  clearBtn.hidden = !k;
+  document.querySelectorAll("tr[data-names]").forEach(tr => {
+    const hit = !k || tr.dataset.names.split(",").some(n => n.indexOf(k) > -1);
+    tr.classList.toggle("dim", !!k && !hit);
+    tr.classList.toggle("match", !!k && hit);
+  });
+  document.querySelectorAll(".card[data-names]").forEach(c => {
+    const hit = !k || c.dataset.names.split(",").some(n => n.indexOf(k) > -1);
+    c.classList.toggle("dim", !!k && !hit);
+  });
+  document.querySelectorAll(".person").forEach(p => {
+    p.classList.toggle("dim", !!k && p.dataset.name.indexOf(k) === -1);
+  });
+  if (k && document.getElementById("view-rules").classList.contains("is-active")) show("person", true);
+  if (k && document.getElementById("view-person").classList.contains("is-active")) {
+    const first = Array.prototype.find.call(document.querySelectorAll(".person"), p => !p.classList.contains("dim"));
+    if (first) first.scrollIntoView({block: "nearest"});
+  }
+}
+q.addEventListener("input", filter);
+clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
+</script>
+</body>
+</html>
