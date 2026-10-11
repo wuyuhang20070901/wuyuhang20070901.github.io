@@ -1,0 +1,1202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>吴宇航 · 黄淮学院学生会宣传部 面试自我介绍</title>
+
+<!--
+  ============================================================
+  吴宇航 · 黄淮学院学生会宣传部 面试自我介绍 —— 第 10 版
+  ------------------------------------------------------------
+  第 10 版改动（都是手机上的问题）：
+  1) 关掉点击高亮和长按选中 —— 之前手机上点一下整屏会闪一层蓝；
+  2) 软件图标改成直接嵌在网页里的 SVG，不再从 icons/ 文件夹读 ——
+     之前手机上那个文件夹没读到，图标全变成灰方块。
+     现在只剩 fonts/ 和 images/ 两个文件夹必须跟着走。
+  旧版仍需 icons/，所以那个文件夹留着别删。
+  结构：一屏一件事，「点一下 / 按一下空格」前进一屏。
+  截图不占版面：每屏右下角有个半透明的小按钮，点它才弹出原始截图。
+  想改内容？直接在下面 HTML 里找文字改就行，别动 <style> 和 <script>。
+  字体在 fonts/、截图在 images/、软件图标在 icons/，
+  三个文件夹要和这个 HTML 一起拷走，不联网也能打开。
+  ============================================================
+-->
+
+<style>
+/* ============================================================
+   0. 字体
+   ------------------------------------------------------------
+   GodoMaum  = 游戏《冰与火之舞》里用的字体（韩文字体，只有英文和数字）
+   ZCOOL KuaiLe = 站酷快乐体，中文的可爱的字（免费可商用）
+   两个都只保留了页面里真正用到的字，所以文件很小。
+   ============================================================ */
+@font-face{
+  font-family:"GodoMaum";
+  src:url("fonts/godomaum.woff2") format("woff2");
+  font-display:block;
+  unicode-range:U+0020-007E;           /* 只管英文数字，中文交给下面那个 */
+}
+@font-face{
+  font-family:"ZCOOL KuaiLe";
+  src:url("fonts/zcool-kuaile.woff2") format("woff2");
+  font-display:block;
+  unicode-range:U+00B7,U+2000-206F,U+2E80-9FFF,U+3000-303F,U+F900-FAFF,U+FE10-FE4F;
+}
+
+:root{
+  --font-num : "GodoMaum","Segoe UI",sans-serif;                 /* 数字 / 英文 */
+  --font-fun : "ZCOOL KuaiLe","GodoMaum","Microsoft YaHei",sans-serif; /* 标题 / 中文大字 */
+  --font-text: "Microsoft YaHei","PingFang SC","Hiragino Sans GB","Noto Sans SC",sans-serif; /* 长句 */
+  --ease:cubic-bezier(.22,1,.36,1);
+  --dur:.68s;
+}
+
+*,*::before,*::after{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;   /* 手机上点一下会闪一层蓝，关掉 */
+}
+html,body{margin:0;padding:0;height:100%}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:#000;color:#fff;overflow:hidden;
+  font-family:var(--font-fun);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  cursor:pointer;              /* 整页都能点，光标就给个手 */
+  -webkit-user-select:none;user-select:none;   /* 手机上长按会选中文字、变蓝，也关掉 */
+  -webkit-touch-callout:none;                  /* 长按不弹「拷贝 / 搜索」菜单 */
+}
+::selection{background:transparent}
+
+/* ============================================================
+   1. 每一屏的舞台
+   .slide 默认是「还没到」的状态（在下方、透明），
+   加上 .is-active 就淡入并归位；已经翻过去的加 .is-left，往上方走。
+   背景：底色 + 一团径向光晕 + 右下角一个巨大的淡数字（幽灵字）。
+   ============================================================ */
+.stage{position:fixed;inset:0}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;align-items:center;
+  padding:clamp(22px,5.5vh,72px) clamp(22px,5vw,88px);
+  padding-bottom:clamp(52px,7vh,86px);    /* 给右下角「原始截图」按钮留位置 */
+  background:var(--bg);
+  opacity:0;visibility:hidden;
+  transform:translateY(4.5vh) scale(.99);
+  transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease),visibility 0s linear var(--dur);
+  will-change:opacity,transform;
+}
+.slide.is-active{
+  opacity:1;visibility:visible;transform:none;
+  transition-delay:0s;
+}
+.slide.is-left{transform:translateY(-4.5vh) scale(.99)}
+
+/* 光晕：一屏一个颜色，位置也换 */
+.slide::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(72% 62% at var(--gx,20%) var(--gy,15%),var(--glow),transparent 68%);
+  animation:drift 26s ease-in-out infinite alternate;
+}
+@keyframes drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,3%,0)}}
+
+/* 幽灵字：右下角一个巨大的淡数字 */
+.slide::after{
+  content:attr(data-ghost);
+  position:absolute;right:-3vw;bottom:-12vh;pointer-events:none;
+  font-family:var(--font-num);font-size:min(56vh,42vw);line-height:.78;
+  color:#fff;opacity:.045;letter-spacing:-.04em;
+}
+
+/* 文字这一层不吃鼠标事件：不然 <p> 那种块级元素的「透明外框」会盖住下面的图标，
+   导致图标第二次就抓不起来了。要能点的东西（比如爆款方框）自己写 pointer-events:auto。 */
+.wrap{position:relative;z-index:2;width:100%;max-width:1180px;margin:0 auto;
+  pointer-events:none}
+
+/* 入场：屏里的小块依次浮现 */
+.anim{opacity:0;transform:translateY(18px);
+      transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.slide.is-active .anim{opacity:1;transform:none;
+      transition-delay:calc(var(--d,0) * 85ms + 120ms)}
+
+/* ============================================================
+   2. 排版件
+   ============================================================ */
+.kicker{
+  font-size:clamp(15px,1.75vw,22px);letter-spacing:.3em;
+  color:var(--accent);margin:0 0 clamp(10px,1.6vh,20px);
+}
+/* 字号同时受宽度和高度约束：宽屏不至于小，矮屏不至于撑破 */
+.name{
+  font-size:clamp(56px,min(17vw,25vh),190px);line-height:.98;margin:0;
+  font-weight:400;letter-spacing:.02em;
+}
+h1.big{
+  font-size:clamp(30px,min(6.6vw,10vh),86px);line-height:1.22;margin:0;font-weight:400;
+}
+.lead{
+  font-family:var(--font-text);
+  font-size:clamp(14px,1.5vw,18px);line-height:1.95;
+  color:rgba(255,255,255,.66);margin:clamp(14px,2.6vh,30px) 0 0;max-width:44em;
+}
+
+/* 巨大的数字 */
+.num{
+  font-family:var(--font-num);font-weight:400;
+  letter-spacing:-.02em;line-height:.86;
+  font-variant-numeric:tabular-nums;
+}
+.hero-num{font-size:clamp(64px,min(20vw,27vh),236px);display:inline-block}
+.mid-num {font-size:clamp(34px,min(6.4vw,10vh),92px);display:inline-block}
+.sm-num  {font-size:clamp(24px,min(3.4vw,6vh),50px);display:inline-block}
+.unit{
+  font-family:var(--font-fun);font-size:.34em;
+  margin-left:.12em;letter-spacing:.03em;color:#fff;
+}
+.hero-num + .unit,.mid-num + .unit{opacity:.92}
+
+.cap{
+  font-size:clamp(15px,1.7vw,21px);letter-spacing:.18em;
+  color:rgba(255,255,255,.55);margin-top:clamp(8px,1.4vh,16px);
+}
+.cap-strong{color:rgba(255,255,255,.82)}
+
+.hr{height:1px;background:rgba(255,255,255,.14);margin:clamp(16px,3vh,34px) 0}
+
+/* 数字下面那条细细的强调线 */
+.accent-bar{width:clamp(48px,7vw,96px);height:3px;border-radius:2px;
+  background:var(--accent);margin-top:clamp(14px,2.4vh,26px)}
+
+.foot{
+  position:absolute;left:clamp(24px,5vw,88px);right:clamp(24px,5vw,88px);
+  bottom:clamp(22px,4.2vh,40px);z-index:3;
+  display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+  font-size:clamp(12px,1.35vw,16px);letter-spacing:.12em;
+  color:rgba(255,255,255,.46);pointer-events:none;
+}
+
+/* ============================================================
+   3. 各屏自己的小布局
+   ============================================================ */
+
+/* --- 封面 --- */
+.cover-rule{width:min(340px,44vw);height:1px;background:rgba(255,255,255,.22);
+  margin:clamp(20px,3.4vh,38px) 0}
+.hint{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.55)}
+.hint .arrow{display:inline-block;animation:nudge 1.9s var(--ease) infinite}
+@keyframes nudge{0%,60%,100%{transform:translateX(0)}30%{transform:translateX(7px)}}
+
+/* --- 大数字 + 一组小数字 --- */
+.two-col{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+  gap:clamp(24px,4vw,60px);align-items:end}
+.stat-row{display:flex;flex-wrap:wrap;gap:clamp(20px,3.6vw,52px)}
+.stat{min-width:0}
+.stat .lab{font-size:clamp(13px,1.5vw,18px);letter-spacing:.14em;
+  color:rgba(255,255,255,.55);margin-top:.5em}
+
+/* --- 爆款：一个数字一个方框，横平竖直排成 4×2 ---
+   只写播放量，不写作品名。第一个（最高的那个）边框用主题色点一下。 */
+.hits{display:grid;grid-template-columns:repeat(4,1fr);
+  gap:clamp(10px,1.7vh,18px) clamp(10px,1.3vw,18px);
+  margin-top:clamp(20px,3.8vh,46px)}
+.hit{position:relative;pointer-events:auto;      /* 上面 .wrap 关了鼠标事件，这里要开回来 */
+  display:flex;align-items:center;justify-content:center;
+  min-height:clamp(62px,9.6vh,112px);
+  padding:clamp(12px,2.2vh,26px) clamp(6px,1vw,16px);
+  border:1px solid rgba(255,255,255,.14);border-radius:clamp(12px,1.3vw,18px);
+  background:rgba(255,255,255,.022);
+  transition:border-color .5s var(--ease),background .5s var(--ease)}
+.hit:hover,.hit.open{border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.055)}
+.hit.top{border-color:var(--accent)}
+.hit b{font-family:var(--font-num);font-weight:400;
+  font-size:clamp(22px,3.2vw,44px);letter-spacing:-.01em;line-height:1;
+  white-space:nowrap;transition:opacity .28s var(--ease)}
+.hit:hover b,.hit.open b{opacity:0}
+
+/* 鼠标移上去（手机上点一下）→ 显示这期作品的名字和发布日期 */
+.hit .tip{position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.45em;padding:6px 10px;opacity:0;pointer-events:none;
+  transition:opacity .28s var(--ease)}
+.hit:hover .tip,.hit.open .tip{opacity:1}
+.hit .tt{font-family:var(--font-text);color:#fff;text-align:center;
+  font-size:clamp(11.5px,1.28vw,15.5px);line-height:1.38}
+.hit .td{font-family:var(--font-num);color:rgba(255,255,255,.55);
+  font-size:clamp(11px,1.18vw,14.5px);letter-spacing:.1em}
+
+/* --- 四个流程：折线图 ---
+   折线用 SVG 画（preserveAspectRatio="none" 让它跟着框拉伸），
+   stroke 加 vector-effect 保证线永远是 2px 粗；
+   圆点是 HTML 元素，绝对定位，位置百分比和折线的坐标一一对应，所以怎么拉都对齐。 */
+.chart{position:relative;height:clamp(120px,22vh,220px);margin-top:clamp(14px,2.6vh,30px)}
+.chart-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;
+  -webkit-mask-image:linear-gradient(90deg,#000,#000);mask-image:linear-gradient(90deg,#000,#000);
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-size:0% 100%;mask-size:0% 100%;
+  transition:-webkit-mask-size 1.5s var(--ease) .2s,mask-size 1.5s var(--ease) .2s}
+.slide.is-active .chart-svg{-webkit-mask-size:100% 100%;mask-size:100% 100%}
+.chart-svg line{stroke:rgba(255,255,255,.09);stroke-width:1;vector-effect:non-scaling-stroke}
+.chart-svg polyline{fill:none;stroke:#fff;stroke-width:2.2;stroke-linejoin:round;
+  stroke-linecap:round;vector-effect:non-scaling-stroke}
+.dot{
+  position:absolute;width:11px;height:11px;border-radius:50%;background:#fff;
+  box-shadow:0 0 0 6px rgba(255,255,255,.07);
+  transform:translate(-50%,-50%) scale(0);
+  transition:transform .5s var(--ease) calc(var(--i) * .14s + .5s)}
+.slide.is-active .dot{transform:translate(-50%,-50%) scale(1)}
+/* x 轴标签：四栏等宽，栏心正好是 12.5% / 37.5% / 62.5% / 87.5% */
+.step-row{display:grid;grid-template-columns:repeat(4,1fr);
+  gap:clamp(8px,1.4vw,20px);margin-top:clamp(10px,1.8vh,20px)}
+.step{text-align:center;min-width:0}
+.step b{display:block;font-size:clamp(14px,1.85vw,24px);font-weight:400;
+  font-family:var(--font-fun);letter-spacing:.03em;white-space:nowrap}
+.step span{display:block;font-family:var(--font-text);font-size:clamp(11px,1.25vw,15px);
+  color:rgba(255,255,255,.5);margin-top:.45em;line-height:1.5}
+
+/* --- 字号阶梯：比 大 更 大，比 强 更 强 ---
+   比 / 更 最小，第一个 大(强) 中等，第二个 大(强) 最大；都坐在同一条基线上。 */
+.ladder{white-space:nowrap}
+.ladder span{display:inline-block;line-height:1;vertical-align:baseline}
+.ladder .s1{font-size:.5em}    /* 比、更、逗号 */
+.ladder .s2{font-size:.86em}   /* 第一个 大 / 强 */
+.ladder .s3{font-size:1.4em}   /* 第二个 大 / 强 */
+
+/* --- 软件图标：整页都能跑（无重力、有惯性、撞到屏幕边和文字都会弹） ---
+   .field 就是整屏（盖在光晕之上、文字之下）；
+   文字靠 data-solid 标出来，每帧当挡板用，图标撞上去只会自己弹开。 */
+.field{position:absolute;inset:0;z-index:1;overflow:hidden;touch-action:none}
+
+.move-hint{
+  margin:clamp(14px,2.6vh,30px) 0 0;text-align:center;
+  font-family:var(--font-fun);font-size:clamp(12px,1.25vw,16px);
+  letter-spacing:.24em;color:rgba(255,255,255,.32);
+}
+.app{
+  position:absolute;left:0;top:0;                 /* 实际位置由 JS 用 transform 给 */
+  display:flex;flex-direction:column;align-items:center;
+  gap:clamp(6px,1vh,10px);
+  cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
+  will-change:transform;
+  transition:filter .25s var(--ease);
+}
+.app.grabbing{cursor:grabbing;filter:drop-shadow(0 0 16px rgba(255,255,255,.45))}
+.app .ic{display:block;pointer-events:none}
+.app .ic svg{display:block;width:clamp(36px,6.2vw,88px);height:clamp(36px,6.2vw,88px);
+  pointer-events:none}
+.app .lv{font-family:var(--font-fun);font-size:clamp(11px,1.28vw,16px);
+  letter-spacing:.16em;color:rgba(255,255,255,.55);line-height:1;pointer-events:none}
+
+/* --- 收尾三条 --- */
+.list3{display:flex;flex-direction:column;gap:clamp(10px,1.8vh,20px);margin-top:clamp(16px,3vh,30px)}
+.list3 div{display:flex;gap:14px;align-items:baseline;font-family:var(--font-text);
+  font-size:clamp(13px,1.5vw,18px);line-height:1.75;color:rgba(255,255,255,.82)}
+.list3 b{font-family:var(--font-num);font-size:clamp(15px,1.7vw,22px);
+  color:var(--accent);font-weight:400}
+
+/* ============================================================
+   4. 角落里的「原始截图」按钮 + 点开看大图
+   ------------------------------------------------------------
+   截图不占版面，缩在右下角，平时半透明；点它才弹出原图，
+   用来看数据是从哪来的。
+   ============================================================ */
+.src-corner{
+  position:absolute;right:clamp(22px,5vw,88px);bottom:clamp(14px,2.4vh,28px);
+  z-index:4;
+}
+.src-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 14px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(255,255,255,.028);
+  color:rgba(255,255,255,.45);
+  font-family:var(--font-fun);font-size:clamp(11px,1.22vw,14.5px);letter-spacing:.13em;
+  cursor:zoom-in;opacity:.62;
+  transition:opacity .3s var(--ease),color .3s var(--ease),
+             border-color .3s var(--ease),transform .3s var(--ease),background .3s var(--ease);
+}
+.src-btn:hover{opacity:1;color:#fff;border-color:rgba(255,255,255,.42);
+  background:rgba(255,255,255,.08);transform:translateY(-2px)}
+.src-btn svg{width:12px;height:12px;flex:0 0 auto;
+  stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+.lightbox{
+  position:fixed;inset:0;z-index:50;display:none;
+  align-items:center;justify-content:center;padding:5vh 5vw;
+  background:rgba(0,0,0,.95);backdrop-filter:blur(6px);cursor:zoom-out;
+}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:82vh;border-radius:10px;
+  border:1px solid rgba(255,255,255,.2)}
+.lightbox .tip{position:absolute;bottom:2.2vh;left:0;right:0;text-align:center;
+  font-size:13px;letter-spacing:.2em;color:rgba(255,255,255,.42)}
+.lb-count{position:absolute;top:3vh;left:0;right:0;text-align:center;
+  font-family:var(--font-num);font-size:16px;letter-spacing:.18em;color:rgba(255,255,255,.5)}
+.lb-nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:clamp(38px,4vw,50px);height:clamp(38px,4vw,50px);
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,255,255,.16);border-radius:50%;
+  background:rgba(255,255,255,.05);color:#fff;cursor:pointer;
+  transition:background .25s var(--ease),border-color .25s var(--ease);
+}
+.lb-nav:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.45)}
+.lb-nav.prev{left:clamp(8px,1.6vw,30px)}
+.lb-nav.next{right:clamp(8px,1.6vw,30px)}
+.lb-nav svg{width:15px;height:15px;stroke:currentColor;fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ============================================================
+   5. 开场屏：会动的圆圈 + 名字，点一下才开始
+   ------------------------------------------------------------
+   .ring 是那个圈：外面几圈「涟漪」往外扩，圈上两段弧一快一慢转。
+   纯 CSS + SVG 画的，不依赖图片。
+   ============================================================ */
+.ring{
+  position:relative;margin:0 auto;
+  width:clamp(190px,min(40vh,56vw),380px);aspect-ratio:1;
+  display:grid;place-items:center;
+}
+.slide.is-active .ring{animation:ringIn .95s var(--ease) both}
+@keyframes ringIn{from{transform:scale(.82);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* 圈后面那团呼吸的光 */
+.ring::before{
+  content:"";position:absolute;inset:-20%;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,255,255,.11),transparent 62%);
+  animation:breathe 5.2s ease-in-out infinite alternate;
+}
+@keyframes breathe{from{opacity:.45;transform:scale(.95)}to{opacity:1;transform:scale(1.08)}}
+
+/* 往外扩散的涟漪 */
+.ripple{
+  position:absolute;inset:0;border-radius:50%;opacity:0;pointer-events:none;
+  border:1px solid rgba(255,255,255,.38);
+  animation:ripple 4.2s cubic-bezier(.2,.6,.3,1) infinite;
+}
+.ripple:nth-of-type(2){animation-delay:1.4s}
+.ripple:nth-of-type(3){animation-delay:2.8s}
+@keyframes ripple{
+  0%{transform:scale(.94);opacity:0}
+  14%{opacity:.5}
+  100%{transform:scale(1.52);opacity:0}
+}
+
+/* 圈本身 + 两段转动的弧 */
+.ring-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.ring-base{fill:none;stroke:rgba(255,255,255,.10);stroke-width:1.4}
+.ring-arc{
+  fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;
+  stroke-dasharray:118 485;                 /* 圆周长约 603 */
+  transform-box:view-box;transform-origin:50% 50%;
+  animation:turn 7s linear infinite;
+}
+.ring-arc.b{stroke:rgba(255,255,255,.45);stroke-dasharray:290 313;
+  animation:turn 13s linear infinite reverse}
+@keyframes turn{to{transform:rotate(360deg)}}
+
+.ring-name{
+  position:relative;z-index:1;font-family:var(--font-fun);
+  font-size:clamp(30px,min(7vh,8.6vw),68px);letter-spacing:.02em;
+  animation:nameIn 1.1s var(--ease) .25s both;
+}
+@keyframes nameIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+
+/* 「点击开始」 */
+.start-hint{
+  margin:clamp(24px,4.4vh,48px) 0 0;text-align:center;
+  font-family:var(--font-fun);font-size:clamp(14px,1.65vw,20px);
+  letter-spacing:.34em;color:rgba(255,255,255,.6);
+}
+.start-hint span{animation:hintPulse 2.6s ease-in-out infinite}
+@keyframes hintPulse{0%,100%{opacity:.45}50%{opacity:1}}
+
+/* 顶部那条随手势走的细线（视觉点缀） */
+.edge{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:41;
+  transition:width .5s var(--ease),background .5s linear;width:10%}
+
+/* ============================================================
+   6. 窄屏微调
+   ============================================================ */
+@media (max-width:900px), (max-height:620px){
+  .slide{padding:clamp(20px,6vw,40px);padding-bottom:66px;align-items:center}
+  .two-col{grid-template-columns:1fr;gap:clamp(18px,3vh,30px);align-items:start}
+  .foot{left:clamp(20px,6vw,40px);right:clamp(20px,6vw,40px)}
+  .src-corner{right:clamp(20px,6vw,40px)}
+  .stat-row{gap:clamp(14px,4vw,26px)}
+  .list3 div{font-size:12.5px}
+  .step-row{gap:6px}
+  .step span{font-size:11px}
+  .hit{grid-template-columns:max-content 1fr;gap:12px}
+  .hit b{font-size:clamp(15px,4.2vw,20px)}
+}
+@media (max-width:640px){
+  .hero-num{font-size:clamp(64px,22vw,120px)}
+  .name{font-size:clamp(52px,20vw,96px)}
+  .app .ic svg{width:clamp(30px,9vw,40px);height:clamp(30px,9vw,40px)}
+  .chart{height:clamp(96px,15vh,150px)}
+  .step b{font-size:13px}
+  .step span{font-size:10.5px;line-height:1.4}
+  .hits{grid-template-columns:repeat(2,1fr);
+    gap:10px;margin-top:clamp(16px,3vh,30px)}
+  .hit b{font-size:clamp(21px,6.4vw,30px)}
+  .hit{padding:clamp(12px,2vh,20px) 6px}
+  .hit i{height:clamp(12px,1.7vh,18px)}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="edge" id="edge" style="--accent:#fff"></div>
+
+<div class="stage" id="stage">
+
+  <!-- ========== 00 开场：动圈 + 名字，点一下才开始 ========== -->
+  <section class="slide" data-ghost=""
+           style="--bg:#000;--glow:rgba(255,255,255,.13);--accent:#fff;--gx:50%;--gy:44%">
+    <div class="wrap" style="text-align:center">
+      <div class="ring">
+        <span class="ripple"></span>
+        <span class="ripple"></span>
+        <span class="ripple"></span>
+        <svg class="ring-svg" viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="ring-base" cx="100" cy="100" r="96"/>
+          <circle class="ring-arc" cx="100" cy="100" r="96"/>
+          <circle class="ring-arc b" cx="100" cy="100" r="96"/>
+        </svg>
+        <span class="ring-name">吴宇航</span>
+      </div>
+      <p class="start-hint anim" style="--d:3"><span>点击开始</span></p>
+    </div>
+  </section>
+
+  <!-- ========== 01 封面 ========== -->
+  <section class="slide" data-ghost="01"
+           style="--bg:#000;--glow:rgba(255,255,255,.10);--accent:#fff;--gx:22%;--gy:18%">
+    <div class="wrap">
+      <p class="kicker anim" style="--d:1">黄淮学院 · 学生会宣传部</p>
+      <h1 class="name anim" style="--d:2">吴宇航</h1>
+      <div class="cover-rule anim" style="--d:3"></div>
+      <p class="anim" style="--d:4;font-size:clamp(15px,2vw,26px);color:rgba(255,255,255,.72);margin:0;letter-spacing:.06em">面试自我介绍</p>
+    </div>
+    <div class="foot">
+      <span class="anim" style="--d:5">2007.09 · 福州 · 大一</span>
+      <span class="hint anim" style="--d:6">点击任意位置继续 <span class="arrow">→</span></span>
+    </div>
+  </section>
+
+  <!-- ========== 02 一句话 ========== -->
+  <section class="slide" data-ghost="02"
+           style="--bg:#030204;--glow:rgba(255,96,64,.16);--accent:#FF6B4A;--gx:78%;--gy:78%">
+    <div class="wrap">
+      <p class="kicker anim" style="--d:1">先说结论</p>
+      <h1 class="big anim" style="--d:2">内容这件事，<br>我做了三年。</h1>
+      <div class="accent-bar anim" style="--d:3"></div>
+      <p class="lead anim" style="--d:4">从初中一年级开始自己做账号，选题、录制、剪辑、封面、运营、看数据，整条流程一个人跑完。高中进了校学生会外宣部，运营学校官方 QQ 空间一年多。</p>
+    </div>
+  </section>
+
+  <!-- ========== 03 自媒体数据 ========== -->
+  <section class="slide" data-ghost="03"
+           style="--bg:#01030A;--glow:rgba(90,200,250,.17);--accent:#5AC8FA;--gx:16%;--gy:22%">
+    <div class="wrap">
+      <p class="kicker anim" style="--d:1">B 站 · 个人账号</p>
+      <div class="two-col">
+        <div class="anim" style="--d:2">
+          <div class="num hero-num"><span data-to="308.3" data-dec="1">308.3</span><span class="unit">万</span></div>
+          <div class="cap cap-strong">累计播放量</div>
+          <div class="accent-bar"></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat anim" style="--d:3">
+            <div class="num mid-num"><span data-to="5398">5398</span></div>
+            <div class="lab">粉丝</div>
+          </div>
+          <div class="stat anim" style="--d:4">
+            <div class="num mid-num"><span data-to="344">344</span></div>
+            <div class="lab">投稿作品</div>
+          </div>
+          <div class="stat anim" style="--d:5">
+            <div class="num mid-num"><span data-to="4299">4299</span></div>
+            <div class="lab">弹幕</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="src-corner anim" style="--d:7">
+      <button class="src-btn" data-srcs="images/bili-stats.jpg" title="看这张数据是从哪来的">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-6 6-2-2-5 5"/></svg>原始截图
+      </button>
+    </div>
+  </section>
+
+  <!-- ========== 04 爆款作品 ========== -->
+  <section class="slide" data-ghost="04"
+           style="--bg:#060302;--glow:rgba(255,120,70,.15);--accent:#FF7A46;--gx:50%;--gy:8%">
+    <div class="wrap">
+      <p class="kicker anim" style="--d:1">播放量 10 万以上的作品</p>
+      <h1 class="big anim" style="--d:2"><span class="num" data-to="8">8</span> 条</h1>
+      <!-- 每个方框里只显示播放量；鼠标移上去（手机上点一下）
+           才显示这期作品的标题和发布日期。 -->
+      <div class="hits">
+        <div class="hit top anim" style="--d:3">
+          <b>43.4万</b>
+          <span class="tip"><span class="tt">木剑裸套打钻剑钻套</span><span class="td">2022.03.24</span></span>
+        </div>
+        <div class="hit anim" style="--d:3.3">
+          <b>33万</b>
+          <span class="tip"><span class="tt">我的力量，超乎你的想象！</span><span class="td">2022.01.02</span></span>
+        </div>
+        <div class="hit anim" style="--d:3.6">
+          <b>21.4万</b>
+          <span class="tip"><span class="tt">起床战争竟有如此杀人机器？</span><span class="td">2022.06.07</span></span>
+        </div>
+        <div class="hit anim" style="--d:3.9">
+          <b>20.8万</b>
+          <span class="tip"><span class="tt">你的改进 G3 还是太吃操作了</span><span class="td">2025.02.07</span></span>
+        </div>
+        <div class="hit anim" style="--d:4.2">
+          <b>18.2万</b>
+          <span class="tip"><span class="tt">给大家水个触屏 5 级跳</span><span class="td">2022.02.06</span></span>
+        </div>
+        <div class="hit anim" style="--d:4.5">
+          <b>16.4万</b>
+          <span class="tip"><span class="tt">秒吃金苹果可不是手柄的专利啊！！！</span><span class="td">2022.03.29</span></span>
+        </div>
+        <div class="hit anim" style="--d:4.8">
+          <b>12.9万</b>
+          <span class="tip"><span class="tt">触屏秒吃金苹果教程（不是骗人）！！！</span><span class="td">2022.03.30</span></span>
+        </div>
+        <div class="hit anim" style="--d:5.1">
+          <b>10.8万</b>
+          <span class="tip"><span class="tt">剑只要撸方块就废了</span><span class="td">2021.07.03</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="src-corner anim" style="--d:7">
+      <button class="src-btn" data-srcs="images/bili-hits-1.jpg,images/bili-hits-2.jpg" title="看这些播放量是从哪来的">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-6 6-2-2-5 5"/></svg>原始截图 2 张
+      </button>
+    </div>
+  </section>
+
+  <!-- ========== 05 变现 ========== -->
+  <section class="slide" data-ghost="05"
+           style="--bg:#050401;--glow:rgba(255,200,90,.14);--accent:#FFC85A;--gx:24%;--gy:76%">
+    <div class="wrap">
+      <p class="kicker anim" style="--d:1">初一到初二 · 第一笔收入</p>
+      <div class="anim" style="--d:2">
+        <div class="num hero-num"><span data-to="2000">2000</span><span class="unit">元+</span></div>
+        <div class="cap cap-strong">靠账号内容变现</div>
+        <div class="accent-bar"></div>
+      </div>
+      <p class="lead anim" style="--d:3">不是家里人给的钱，是自己做的东西被认了价。做了两年，什么选题有人点开、什么封面留得住人，心里大概有数。</p>
+    </div>
+  </section>
+
+  <!-- ========== 06 校内官号 ========== -->
+  <section class="slide" data-ghost="06"
+           style="--bg:#02030A;--glow:rgba(120,140,255,.16);--accent:#7C8CFF;--gx:50%;--gy:88%">
+    <div class="wrap" style="text-align:center">
+      <p class="kicker anim" style="--d:1">高中 · 校学生会外宣部</p>
+      <h1 class="big anim" style="--d:2">面试进的，干了一年多</h1>
+      <div class="anim" style="--d:3;margin-top:clamp(14px,2.6vh,28px)">
+        <div class="num hero-num"><span data-to="69.6" data-dec="1">69.6</span><span class="unit">万</span></div>
+        <div class="cap cap-strong">官方 QQ 空间 总访客</div>
+        <div class="accent-bar" style="margin-left:auto;margin-right:auto"></div>
+      </div>
+      <div class="stat-row anim" style="--d:4;justify-content:center;margin-top:clamp(16px,3vh,34px)">
+        <div class="stat">
+          <div class="num sm-num"><span data-to="2770">2770</span></div>
+          <div class="lab">条说说</div>
+        </div>
+        <div class="stat">
+          <div class="num sm-num"><span data-to="7502">7502</span></div>
+          <div class="lab">张相册照片</div>
+        </div>
+        <div class="stat">
+          <div class="num sm-num"><span data-to="1">1</span><span class="unit">年+</span></div>
+          <div class="lab">运营时长</div>
+        </div>
+      </div>
+    </div>
+    <div class="src-corner anim" style="--d:7">
+      <button class="src-btn" data-srcs="images/qq-stats.jpg,images/qq-post.jpg" title="看这个官号当时的真实样子">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-6 6-2-2-5 5"/></svg>原始截图 2 张
+      </button>
+    </div>
+  </section>
+
+  <!-- ========== 07 校园广告 ========== -->
+  <section class="slide" data-ghost="07"
+           style="--bg:#010604;--glow:rgba(90,220,170,.14);--accent:#4FD1A5;--gx:80%;--gy:24%">
+    <div class="wrap">
+      <p class="kicker anim" style="--d:1">高中 · 校园广告</p>
+      <div class="anim" style="--d:2">
+        <div class="num hero-num"><span data-to="8000">8000</span><span class="unit">元+</span></div>
+        <div class="cap cap-strong">和同学一起做出来的广告收入</div>
+        <div class="accent-bar"></div>
+      </div>
+      <!-- 四个流程画成一条上升的折线：四个点分别在 12.5% / 37.5% / 62.5% / 87.5% 的横向位置，
+           y 用的是 0~100 的相对高度（78 → 60 → 38 → 12），越往后越高。 -->
+      <div class="chart anim" style="--d:3">
+        <svg class="chart-svg" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="0" y1="99" x2="1000" y2="99"/>
+          <polyline points="125,78 375,60 625,38 875,12"/>
+        </svg>
+        <span class="dot anim" style="--i:0;left:12.5%;top:78%"></span>
+        <span class="dot anim" style="--i:1;left:37.5%;top:60%"></span>
+        <span class="dot anim" style="--i:2;left:62.5%;top:38%"></span>
+        <span class="dot anim" style="--i:3;left:87.5%;top:12%"></span>
+      </div>
+      <div class="step-row">
+        <div class="step anim" style="--d:4"><b>找商家</b><span>跑校外的店铺，聊需求</span></div>
+        <div class="step anim" style="--d:4.4"><b>谈价格</b><span>定档期、定位置、定费用</span></div>
+        <div class="step anim" style="--d:4.8"><b>校内投放</b><span>自己出图、自己安排</span></div>
+        <div class="step anim" style="--d:5.2"><b>收回款</b><span>交付有记录，钱收得回来</span></div>
+      </div>
+      <p class="lead anim" style="--d:6">这件事让我习惯了另一面：跟陌生人开口谈生意、按约定时间交货。</p>
+    </div>
+  </section>
+
+  <!-- ========== 08 工具 ========== -->
+  <section class="slide" data-ghost="08"
+           style="--bg:#030303;--glow:rgba(255,255,255,.09);--accent:#fff;--gx:50%;--gy:12%">
+    <div class="wrap">
+      <!-- 加了 data-solid 的元素 = 刚体挡板：图标撞上来只会自己弹开，文字一动不动 -->
+      <p class="kicker anim" data-solid style="--d:1">出片用的工具</p>
+      <!-- 字号阶梯：比 大 更 大，比 强 更 强
+           s1（比、更）最小 → s2（第一个 大/强）中等 → s3（第二个 大/强）最大 -->
+      <h1 class="big ladder anim" data-solid style="--d:2"><span class="s1">比</span><span class="s2">大</span><span class="s1">更</span><span class="s3">大</span><span class="s1">，</span><span class="s1">比</span><span class="s2">强</span><span class="s1">更</span><span class="s3">强</span></h1>
+      <p class="lead anim" data-solid style="--d:4">剪辑、包装、加字幕、做封面、拼海报、写通知——这些活我平时就在干，不用从零教。</p>
+      <p class="move-hint anim" data-solid style="--d:5">这些图标可移动哦</p>
+    </div>
+    <!-- 软件图标是**直接嵌在网页里**的彩色 SVG（原来放在 icons/ 文件夹里用 <img> 引，
+         手机上有时候读不到就变成灰方块，所以改成内嵌，不再依赖外部文件）。
+         这里是整屏的活动区：按住能拖，松手带惯性继续滑，
+         撞到屏幕四边和文字都会弹回来，没有重力（不会往下掉）。 -->
+    <div class="field" id="field">
+      <div class="app"><span class="ic"><svg class="ic-svg" role="img" aria-label="剪映" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 250">
+  <rect x="2" y="2" width="252" height="245.6" rx="42.5" fill="#151517" stroke="#2c2c31" stroke-width="4"/>
+  <path fill="#ffffff" fill-rule="evenodd" transform="translate(31 29) scale(8)" d="M24.189 6.442V2.671l-4.535 2.383V4.91c.002-1.505-1.078-2.411-2.638-2.411H2.64C.993 2.5 0 3.407 0 4.91v3.81L6.354 12L0 15.316v3.8C0 20.595 1 21.5 2.64 21.5h14.373c1.56 0 2.639-.907 2.639-2.382v-.197l4.536 2.409v-3.828L13.64 12l10.55-5.557zM9.982 13.873l7.797 4.083H2.157zm7.741-7.828l-7.742 4.057l-7.825-4.057z"/>
+</svg></span><span class="lv">精通</span></div>
+      <div class="app"><span class="ic"><svg class="ic-svg" role="img" aria-label="Premiere Pro" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 250"><path fill="#00005b" d="M45.333 0h165.334C235.733 0 256 20.267 256 45.333v158.934c0 25.066-20.267 45.333-45.333 45.333H45.333C20.267 249.6 0 229.333 0 204.267V45.333C0 20.267 20.267 0 45.333 0"/><path fill="#99f" d="M60.8 175.04V65.28c0-.747.32-1.173 1.067-1.173l1.548-.003l1.198-.01l.845-.016l.9-.023l.967-.034l.515-.021c.96-.04 1.935-.065 2.93-.086l3.055-.064q.521-.012 1.051-.028l1.07-.035q1.44-.052 2.952-.08l3.093-.055l2.141-.047l1.095-.032c2.204-.07 4.361-.094 6.502-.102l3.204-.004c8.747 0 16 1.066 21.974 3.306A38.1 38.1 0 0 1 131.2 75.52a34 34 0 0 1 7.787 12.16c1.6 4.48 2.453 9.067 2.453 13.867q0 13.76-6.4 22.72c-4.267 5.973-10.24 10.453-17.173 13.013c-7.012 2.578-14.721 3.56-23.128 3.623H91.69l-1.187-.012l-.761-.018l-.448-.019l-.402-.024l-.359-.03a16 16 0 0 0-.692-.052l-.52-.023l-.57-.015l-.951-.013l-1.853-.004v34.24c.106.747-.427 1.387-1.174 1.494H62.08c-.853 0-1.28-.427-1.28-1.387m23.253-90.347v35.84l1.254.09a43 43 0 0 0 2.906.124h5.654c4.16 0 8.32-.64 12.266-1.92c3.414-.96 6.4-2.987 8.747-5.654c2.24-2.666 3.307-6.293 3.307-10.986a17.56 17.56 0 0 0-2.454-9.494c-1.737-2.657-4.161-4.727-7.082-5.928l-.384-.152c-3.947-1.6-8.214-2.24-12.587-2.133l-2.466.003l-1.159.007l-1.107.015l-1.051.024q-.769.02-1.47.058a37 37 0 0 0-.688-.028l-.639-.014l-.3-.002l-.566.003l-.514.014l-.238.01l-.437.025l-.384.03l-.173.016l-.303.035zm72.32 6.187h18.667c1.007 0 1.825.666 2.182 1.549l.058.158c.32.853.533 1.706.64 2.666c.213 1.067.427 2.24.533 3.307l.09 1.032c.07.881.124 1.818.124 2.808a39.7 39.7 0 0 1 10.82-8.849l.593-.324c4.907-2.774 10.56-4.16 16.213-4.16c.747-.107 1.387.426 1.494 1.173v21.227c0 .853-.534 1.173-1.707 1.173c-3.584-.1-7.26.173-10.77.903l-.75.164q-4.64.96-8.96 2.88c-2.027.96-3.947 2.24-5.44 3.946v54.4c0 1.067-.427 1.494-1.387 1.494H157.76c-.853.106-1.6-.427-1.707-1.28v-59.52c0-2.56 0-5.227-.106-8l-.064-2.08l-.086-4.16q-.024-1.04-.064-2.08c0-2.454-.213-4.8-.426-7.254c-.107-.533.213-1.066.746-1.173c0-.091.157-.104.269-.04z"/></svg></span><span class="lv">熟练</span></div>
+      <div class="app"><span class="ic"><svg class="ic-svg" role="img" aria-label="After Effects" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 250"><rect width="256" height="249.6" fill="#00005b" rx="42.5"/><path fill="#99f" d="M102.843 149.333H63.172L55.1 174.454a2.02 2.02 0 0 1-1.901 1.547L32.947 176q-1.72 0-1.202-1.89l34.347-98.509l.343-1.035l.114-.354l.23-.74c.114-.382.228-.787.343-1.226c.45-2.291.68-4.62.687-6.955a1.063 1.063 0 0 1 1.202-1.202h27.306q1.2 0 1.374.859l38.983 109.335q.515 1.718-1.03 1.717h-22.326a1.59 1.59 0 0 1-1.717-1.202zm-33.488-21.181h27.134l-.387-1.277l-.621-2.022l-.909-2.896l-1.745-5.467l-1.662-5.254l-3.092-9.789a336 336 0 0 1-2.46-8.138l-.878-3.096l-.948-3.393l-.866-3.147h-.172a139 139 0 0 1-3.136 12.23l-1.16 3.723l-2.79 9l-1.414 4.585q-.383 1.242-.765 2.456l-.76 2.398l-.756 2.342l-.752 2.284l-.748 2.227q-.559 1.65-1.113 3.234m130.518 11.404h-33.831a24.1 24.1 0 0 0 3.263 9.461a17.67 17.67 0 0 0 7.813 6.44a32.6 32.6 0 0 0 13.653 2.676a62 62 0 0 0 11.077-1.216a40.8 40.8 0 0 0 9.523-2.482q.859-.685.86.858v16.315c.028.445-.061.889-.259 1.288c-.196.312-.46.576-.772.773a43.7 43.7 0 0 1-10.64 3.17a75.5 75.5 0 0 1-15.113 1.287q-11.814 0-19.917-3.545l-.52-.233a36.4 36.4 0 0 1-13.394-10.132a39.7 39.7 0 0 1-7.385-13.996A55.1 55.1 0 0 1 142 134.678a54.1 54.1 0 0 1 2.662-16.916a44.2 44.2 0 0 1 7.985-14.597a38.4 38.4 0 0 1 12.88-10.133c5.037-2.46 10.991-3.343 17.86-3.343a38.8 38.8 0 0 1 16.573 3.263a29.2 29.2 0 0 1 11.248 8.495a39 39 0 0 1 6.354 12.107a43.2 43.2 0 0 1 2.061 13.052q0 3.78-.257 6.87l-.153 1.764l-.16 1.674l-.095.848l-.022.179a1.556 1.556 0 0 1-1.545 1.374l-.471.01l-.587.03l-.457.033l-1.068.091l-.938.093q-.383.04-.795.075l-.851.067l-.909.06l-.965.05l-1.022.043l-.533.018l-1.107.03c-1.095.027-2.217-.041-3.368-.125l-1.746-.128a40 40 0 0 0-2.7-.106m-33.831-15.645h23.386l1.992-.013l1.354-.019l.877-.02l.984-.034a6 6 0 0 0 2.49-.825v-1.03a13.7 13.7 0 0 0-.686-3.95a14.03 14.03 0 0 0-13.91-9.79a14.92 14.92 0 0 0-14.169 8.072a24.8 24.8 0 0 0-2.318 7.61"/></svg></span><span class="lv">熟练</span></div>
+      <div class="app"><span class="ic"><svg class="ic-svg" role="img" aria-label="Photoshop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 250"><rect width="256" height="249.6" fill="#001e36" rx="42.5"/><path fill="#31a8ff" d="M57.644 175.035V65.297q0-1.201 1.031-1.202l1.087-.003l1.858-.02l2.582-.051l8.65-.183l9.275-.172q4.893-.085 9.702-.086q13.05 0 21.982 3.263a38.1 38.1 0 0 1 14.34 8.758a33.6 33.6 0 0 1 7.814 12.108a40.2 40.2 0 0 1 2.405 13.824q0 13.741-6.355 22.669a35.9 35.9 0 0 1-16.6 12.756l-.573.21c-6.973 2.601-14.695 3.541-23.164 3.6l-1.316.004l-1.953-.01l-.985-.014l-1.098-.026l-.662-.026l-.402-.021l-.989-.036l-1.209-.025l-1.82-.013l-.405-.001v34.263a1.366 1.366 0 0 1-1.546 1.546H58.847q-1.204.001-1.203-1.374M80.84 84.703v35.792q2.23.173 4.12.172h5.668a40.3 40.3 0 0 0 11.533-1.727l.746-.233a18.5 18.5 0 0 0 8.759-5.668q3.228-3.807 3.344-10.492l.005-.499c.09-3.322-.774-6.6-2.491-9.445a16 16 0 0 0-7.47-6.097a31.8 31.8 0 0 0-12.537-2.146l-2.178.006l-1.374.012l-1.311.017l-1.85.036l-1.35.038l-.701.026l-.937.044l-.798.049l-.455.036l-.393.038l-.173.02zm123.93 29.284a40.2 40.2 0 0 0-9.458-3.442l-.76-.164a54.3 54.3 0 0 0-11.009-1.363l-.926-.011a22.2 22.2 0 0 0-6.44.773a5.8 5.8 0 0 0-3.35 2.146a5.4 5.4 0 0 0-.858 2.92a4.56 4.56 0 0 0 1.03 2.747a11.7 11.7 0 0 0 3.235 2.637l.372.197a72 72 0 0 0 7.556 3.52a75 75 0 0 1 16.4 7.814a24.94 24.94 0 0 1 8.416 8.845a23.6 23.6 0 0 1 2.49 10.99a24.7 24.7 0 0 1-4.122 14.169a27.1 27.1 0 0 1-11.936 9.53q-7.556 3.32-18.557 3.432l-.762.004a70 70 0 0 1-13.556-1.188l-.956-.186a46.3 46.3 0 0 1-10.905-3.435a2.22 2.22 0 0 1-1.202-1.89v-18.718a1.01 1.01 0 0 1 .43-.945a.83.83 0 0 1 .944.086a45.9 45.9 0 0 0 13.223 5.238a54.5 54.5 0 0 0 12.537 1.632q6.009 0 8.844-1.546a4.86 4.86 0 0 0 2.834-4.465q0-2.23-2.576-4.293q-1.08-.864-3.097-1.88l-.643-.316l-.686-.323l-.36-.164l-.754-.334l-.393-.17l-.82-.344l-.427-.175l-.886-.355l-.46-.18l-.953-.367l-.997-.373a63 63 0 0 1-15.199-7.728a26.2 26.2 0 0 1-8.071-9.016a23.7 23.7 0 0 1-2.49-10.905a24.6 24.6 0 0 1 3.606-12.88c2.7-4.27 6.576-7.67 11.163-9.788q7.555-3.776 18.89-3.779a83.6 83.6 0 0 1 13.224.945a34.7 34.7 0 0 1 9.206 2.49c.473.136.854.485 1.03.945c.117.419.174.852.172 1.288v17.345c.025.41-.172.803-.515 1.03a1.66 1.66 0 0 1-1.478 0"/></svg></span><span class="lv">基础</span></div>
+      <div class="app"><span class="ic"><svg class="ic-svg" role="img" aria-label="Word" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 486 500"><defs><radialGradient id="ic4-SVGFoCn2kuX" cx="-689.34" cy="753.93" r="13.89" fx="-689.34" fy="753.93" gradientTransform="matrix(47.56 0 0 -20.15 33260.63 15691.18)" gradientUnits="userSpaceOnUse"><stop offset=".18" stop-color="#1657f4"/><stop offset=".57" stop-color="#0036c4"/></radialGradient><radialGradient id="ic4-SVGRQhcvdCB" cx="-730.97" cy="806.4" r="13.89" fx="-730.97" fy="806.4" gradientTransform="rotate(133.54 -23021.96 -24387.349)scale(29.36 -72.31)skewX(.03)" gradientUnits="userSpaceOnUse"><stop offset=".14" stop-color="#d471ff"/><stop offset=".83" stop-color="#509df5" stop-opacity="0"/></radialGradient><radialGradient id="ic4-SVGwb3NpbBE" cx="-682.21" cy="801.86" r="13.89" fx="-682.21" fy="801.86" gradientTransform="matrix(0 18.62 101.62 0 -81063.08 13022.32)" gradientUnits="userSpaceOnUse"><stop offset=".28" stop-color="#4f006f" stop-opacity="0"/><stop offset="1" stop-color="#4f006f"/></radialGradient><radialGradient id="ic4-SVGYatJibcz" cx="-749.58" cy="798.74" r="13.89" fx="-749.58" fy="798.74" gradientTransform="matrix(-28.7167 6.70901 16.06567 68.78884 -33867.69 -49911.37)" gradientUnits="userSpaceOnUse"><stop offset=".06" stop-color="#e4a7fe"/><stop offset=".54" stop-color="#e4a7fe" stop-opacity="0"/></radialGradient><radialGradient id="ic4-SVG69wywdPO" cx="-675.64" cy="797.48" r="13.89" fx="-675.64" fy="797.48" gradientTransform="rotate(225 3955.88 12306.641)scale(-22.62 22.62)skewY(-.01)" gradientUnits="userSpaceOnUse"><stop offset=".08" stop-color="#367af2"/><stop offset=".87" stop-color="#001a8f"/></radialGradient><radialGradient id="ic4-SVGl2nTflwp" cx="-657.62" cy="854.65" r="13.89" fx="-657.62" fy="854.65" gradientTransform="matrix(0 11.2 12.76 0 -10796.09 7734.8)" gradientUnits="userSpaceOnUse"><stop offset=".59" stop-color="#2763e5" stop-opacity="0"/><stop offset=".97" stop-color="#58aafe"/></radialGradient><linearGradient id="ic4-SVGlYvTzb8n" x1="69.43" x2="388.45" y1="238.11" y2="238.11" gradientTransform="matrix(1 0 0 -1 0 502)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#66c0ff"/><stop offset=".26" stop-color="#0094f0"/></linearGradient><linearGradient id="ic4-SVGty6mmbHz" x1="69.48" x2="485.94" y1="380.04" y2="373.16" gradientTransform="matrix(1 0 0 -1 0 502)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9deaff"/><stop offset=".2" stop-color="#3bd5ff"/></linearGradient></defs><path fill="url(#ic4-SVGFoCn2kuX)" d="m69.43 376.25l194.4-237.36L486 293.13v158.26c0 26.85-21.76 48.61-48.6 48.61H152.74c-46.01 0-83.31-37.31-83.31-83.33z"/><path fill="url(#ic4-SVGlYvTzb8n)" d="M69.43 208.87c0-34.52 27.98-62.5 62.49-62.5h283.11L486 111.11v173.61c0 26.85-21.76 48.61-48.6 48.61H152.74c-46.01 0-83.31 37.31-83.31 83.33v-207.8Z"/><path fill="url(#ic4-SVGRQhcvdCB)" fill-opacity=".6" d="M69.43 208.87c0-34.52 27.98-62.5 62.49-62.5h283.11L486 111.11v173.61c0 26.85-21.76 48.61-48.6 48.61H152.74c-46.01 0-83.31 37.31-83.31 83.33v-207.8Z"/><path fill="url(#ic4-SVGwb3NpbBE)" fill-opacity=".1" d="M69.43 208.87c0-34.52 27.98-62.5 62.49-62.5h283.11L486 111.11v173.61c0 26.85-21.76 48.61-48.6 48.61H152.74c-46.01 0-83.31 37.31-83.31 83.33v-207.8Z"/><path fill="url(#ic4-SVGty6mmbHz)" d="M69.43 83.33C69.43 37.31 106.73 0 152.74 0H437.4C464.24 0 486 21.76 486 48.61v69.44c0 26.85-21.76 48.61-48.6 48.61H152.74c-46.01 0-83.31 37.31-83.31 83.33z"/><path fill="url(#ic4-SVGYatJibcz)" fill-opacity=".8" d="M69.43 83.33C69.43 37.31 106.73 0 152.74 0H437.4C464.24 0 486 21.76 486 48.61v69.44c0 26.85-21.76 48.61-48.6 48.61H152.74c-46.01 0-83.31 37.31-83.31 83.33z"/><rect width="222.17" height="222.22" y="236.11" fill="url(#ic4-SVG69wywdPO)" rx="45.13" ry="45.13"/><rect width="222.17" height="222.22" y="236.11" fill="url(#ic4-SVGl2nTflwp)" fill-opacity=".65" rx="45.13" ry="45.13"/><path fill="#fff" d="M187.26 283.73L159.92 410.7l-32.69.02l-16.14-76.19l-16.9 76.19h-33L34.91 283.75h26.95l16.21 83.79l16.11-83.79h33.04l16.87 83.79l15.82-83.79l27.34-.02Z"/></svg></span><span class="lv">熟练</span></div>
+      <div class="app"><span class="ic"><svg class="ic-svg" role="img" aria-label="Excel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 486 500"><defs><radialGradient id="ic5-SVGBLvhWb7B" cx="-746.66" cy="781.44" r="13.89" fx="-746.66" fy="781.44" gradientTransform="rotate(-133.54 -9646.6 -18892.943)scale(41.12 -31.9)skewX(-.01)" gradientUnits="userSpaceOnUse"><stop offset=".06" stop-color="#379539"/><stop offset=".42" stop-color="#297c2d"/><stop offset=".7" stop-color="#15561c"/></radialGradient><radialGradient id="ic5-SVGiem17pLJ" cx="-773.19" cy="771.25" r="13.89" fx="-773.19" fy="771.25" gradientTransform="matrix(-11.97612 -11.58137 -8.95853 9.26806 -2155.12 -15858.88)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#073b10"/><stop offset=".99" stop-color="#084a13" stop-opacity="0"/></radialGradient><radialGradient id="ic5-SVGI4foLdGU" cx="-824.11" cy="810.99" r="13.89" fx="-824.11" fy="810.99" gradientTransform="matrix(-9.02 0 0 19.09 -7120.4 -15378.69)" gradientUnits="userSpaceOnUse"><stop offset=".29" stop-color="#4eb43b"/><stop offset="1" stop-color="#72cc61" stop-opacity="0"/></radialGradient><radialGradient id="ic5-SVGaGihndNj" cx="-769.14" cy="808.9" r="13.89" fx="-769.14" fy="808.9" gradientTransform="rotate(218.97 -11176.158 5816.417)scale(21.75 21.69)skewY(.01)" gradientUnits="userSpaceOnUse"><stop offset=".44" stop-color="#79e96d"/><stop offset="1" stop-color="#d0eb76"/></radialGradient><radialGradient id="ic5-SVG2xwNqWBJ" cx="-675.64" cy="793.28" r="13.89" fx="-675.64" fy="793.28" gradientTransform="matrix(15.99196 15.99755 45.54153 -45.54797 -25315.85 47178.18)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#20a85e"/><stop offset=".94" stop-color="#09442a"/></radialGradient><radialGradient id="ic5-SVGSXGvJpdu" cx="-657.62" cy="853.99" r="13.89" fx="-657.62" fy="853.99" gradientTransform="matrix(0 11.2 12.9 0 -10902.85 7734.8)" gradientUnits="userSpaceOnUse"><stop offset=".58" stop-color="#33a662" stop-opacity="0"/><stop offset=".97" stop-color="#98f0b0"/></radialGradient><linearGradient id="ic5-SVGYKi9AcMy" x1="69.43" x2="260.84" y1="210.33" y2="210.33" gradientTransform="matrix(1 0 0 -1 0 502)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#52d17c"/><stop offset=".33" stop-color="#4aa647"/></linearGradient><linearGradient id="ic5-SVGKfyJ5dTO" x1="194.4" x2="194.4" y1="335.33" y2="161.68" gradientTransform="matrix(1 0 0 -1 0 502)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#29852f"/><stop offset=".5" stop-color="#4aa647" stop-opacity="0"/></linearGradient><linearGradient id="ic5-SVG1I0GMd2A" x1="80.49" x2="311.45" y1="297.22" y2="497.54" gradientTransform="matrix(1 0 0 -1 0 502)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#66d052"/><stop offset="1" stop-color="#85e972"/></linearGradient><linearGradient id="ic5-SVG1E0J2brd" x1="182.11" x2="69.43" y1="377" y2="377" gradientTransform="matrix(1 0 0 -1 0 502)" gradientUnits="userSpaceOnUse"><stop offset=".18" stop-color="#c0e075" stop-opacity="0"/><stop offset="1" stop-color="#d1eb95"/></linearGradient></defs><path fill="url(#ic5-SVGBLvhWb7B)" d="M69.43 159.72c0-34.52 27.98-62.5 62.49-62.5h354.09v361.11c0 23.01-18.65 41.67-41.66 41.67H152.74c-46.01 0-83.31-37.31-83.31-83.33z"/><path fill="url(#ic5-SVGiem17pLJ)" fill-opacity=".7" d="M69.43 159.72c0-34.52 27.98-62.5 62.49-62.5h354.09v361.11c0 23.01-18.65 41.67-41.66 41.67H152.74c-46.01 0-83.31-37.31-83.31-83.33z"/><path fill="url(#ic5-SVGYKi9AcMy)" d="M69.43 229.17c0-34.52 27.98-62.5 62.49-62.5h187.46c-23.01 0-41.66 18.66-41.66 41.67v83.33c0 23.01-18.65 41.67-41.66 41.67h-83.31c-46.01 0-83.31 37.31-83.31 83.33v-187.5Z"/><path fill="url(#ic5-SVGKfyJ5dTO)" fill-opacity=".3" d="M69.43 229.17c0-34.52 27.98-62.5 62.49-62.5h187.46c-23.01 0-41.66 18.66-41.66 41.67v83.33c0 23.01-18.65 41.67-41.66 41.67h-83.31c-46.01 0-83.31 37.31-83.31 83.33v-187.5Z"/><path fill="url(#ic5-SVG1I0GMd2A)" d="M69.43 83.33C69.43 37.31 106.73 0 152.74 0h166.63v166.67H152.74c-46.01 0-83.31 37.31-83.31 83.33z"/><path fill="url(#ic5-SVGI4foLdGU)" d="M69.43 83.33C69.43 37.31 106.73 0 152.74 0h166.63v166.67H152.74c-46.01 0-83.31 37.31-83.31 83.33z"/><path fill="url(#ic5-SVG1E0J2brd)" d="M69.43 83.33C69.43 37.31 106.73 0 152.74 0h166.63v166.67H152.74c-46.01 0-83.31 37.31-83.31 83.33z"/><rect width="208.29" height="166.67" x="277.71" fill="url(#ic5-SVGaGihndNj)" rx="41.66" ry="41.66"/><rect width="222.17" height="222.22" y="236.11" fill="url(#ic5-SVG2xwNqWBJ)" rx="45.13" ry="45.13"/><rect width="222.17" height="222.22" y="236.11" fill="url(#ic5-SVGSXGvJpdu)" fill-opacity=".3" rx="45.13" ry="45.13"/><path fill="#fff" d="M169.48 410.71h-34.25l-21.5-40.47c-.77-1.42-1.36-2.54-1.77-3.37c-.35-.88-.74-1.89-1.15-3.01h-.35q-.795 2.13-1.5 3.45c-.47.89-1.03 1.98-1.68 3.28l-22.3 40.11h-32.3l38.76-63.58l-36.1-63.4h33.8l19.11 36.13q1.155 2.22 1.95 3.9q.885 1.59 1.77 3.81h.35l1.95-4.07c.53-1 1.24-2.33 2.12-3.98l19.82-35.77h32.21l-36.63 62.43l37.7 64.55Z"/></svg></span><span class="lv">熟练</span></div>
+      <div class="app"><span class="ic"><svg class="ic-svg" role="img" aria-label="PowerPoint" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><linearGradient id="ic6-SVGumliPbrf" x1="256" x2="256" y1="490.8" y2="25.2" gradientTransform="matrix(1 0 0 -1 0 514)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d04223"/><stop offset="1" stop-color="#d44a27"/></linearGradient><path fill="url(#ic6-SVGumliPbrf)" d="M492.1 73.2H280.6v-50L0 69.7v372.5l280.6 46.6v-60.7h211.5c11 0 19.9-8.4 19.9-18.8V92c0-10.4-8.9-18.8-19.9-18.8m3.5 337.9l-214.9.3v-38.6h154.2v-21.2H280.6v-28.8h154.2v-21.2H280.6v-53.1c12.6 15.3 31.7 25.1 53.1 25.1c37.9 0 68.6-30.7 68.6-68.6h-68.6v-68.6c-21.4 0-40.5 9.8-53.1 25.1V89.9h214.9v321.2zM412 196.3h-68.6v-68.6c37.9 0 68.6 30.8 68.6 68.6"/><path fill="#fff" d="M280.6 89.9v71.5c12.6-15.3 31.7-25.1 53.1-25.1v68.6h68.6c0 37.9-30.7 68.6-68.6 68.6c-21.4 0-40.5-9.8-53.1-25.1v53.1h154.2v21.2H280.6v28.8h154.2v21.2H280.6v38.6l214.9-.3V89.9zm62.8 106.4v-68.6c37.9 0 68.6 30.7 68.6 68.6zm-163-3.4c-8.1-11.5-16.2-17.5-33.7-16.9l-54 3v156l29.2 1.7v-55.4h22.7c24.9-1.3 41.5-24.4 43.8-51.2c1.1-12.6-1-27.2-8-37.2M137 252.5h-15.2v-47l16-.1c9.9.3 17.2 8.6 17.6 22.5c.6 12.3-7.5 24.2-18.4 24.6"/></svg></span><span class="lv">熟练</span></div>
+    </div>
+  </section>
+
+  <!-- ========== 09 AI 工作流 ========== -->
+  <section class="slide" data-ghost="09"
+           style="--bg:#04030A;--glow:rgba(130,110,255,.17);--accent:#8C7CFF;--gx:14%;--gy:64%">
+    <div class="wrap">
+      <p class="kicker anim" style="--d:1">最近 30 天 · 我的工作方式</p>
+      <div class="anim" style="--d:2">
+        <div class="num hero-num"><span data-to="5.05" data-dec="2">5.05</span><span class="unit">亿</span></div>
+        <div class="cap cap-strong">处理的 Token 量</div>
+        <div class="accent-bar"></div>
+      </div>
+      <div class="stat-row anim" style="--d:3;margin-top:clamp(16px,3vh,32px)">
+        <div class="stat">
+          <div class="num sm-num"><span data-to="2457">2457</span></div>
+          <div class="lab">次 API 请求</div>
+        </div>
+        <div class="stat">
+          <div class="num sm-num"><span data-to="30">30</span></div>
+          <div class="lab">天内</div>
+        </div>
+      </div>
+      <p class="lead anim" style="--d:4">用 DeepSeek、WorkBuddy 这类 AI 工作台把重复的活交出去：写脚本、整理表格、处理素材、做小工具。同样的时间，能多出好几条片子。</p>
+    </div>
+    <div class="src-corner anim" style="--d:7">
+      <button class="src-btn" data-srcs="images/ai-usage.jpg,images/ai-detail.jpg" title="看这个用量的原始后台">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-6 6-2-2-5 5"/></svg>原始截图 2 张
+      </button>
+    </div>
+  </section>
+
+  <!-- ========== 10 收尾 ========== -->
+  <section class="slide" data-ghost="10"
+           style="--bg:#000;--glow:rgba(255,255,255,.11);--accent:#fff;--gx:74%;--gy:80%">
+    <div class="wrap">
+      <p class="kicker anim" style="--d:1">黄淮学院学生会宣传部</p>
+      <h1 class="big anim" style="--d:2">三件马上能用的东西</h1>
+      <div class="list3">
+        <div class="anim" style="--d:3"><b>01</b><span>内容生产：剪映、Pr、Ae 都在用，从素材到成片一个人能走完。</span></div>
+        <div class="anim" style="--d:4"><b>02</b><span>账号运营：运营过学生会官方 QQ 空间一年多，知道什么内容有人看。</span></div>
+        <div class="anim" style="--d:5"><b>03</b><span>效率：AI 和 Office 都熟，重复的活能压成流程，省下的是时间。</span></div>
+      </div>
+      <div class="hr anim" style="--d:6"></div>
+      <p class="anim" style="--d:7;font-family:var(--font-num);font-size:clamp(16px,2.2vw,30px);margin:clamp(18px,3.4vh,36px) 0 0;letter-spacing:.04em">吴宇航 &nbsp;·&nbsp; 2007.09.01 &nbsp;·&nbsp; 福州</p>
+    </div>
+    <div class="foot">
+      <span></span>
+      <span class="hint anim" style="--d:8">点击回到开头 <span class="arrow">↺</span></span>
+    </div>
+  </section>
+
+</div>
+
+<!-- 看大图（原始截图） -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-nav prev" id="lb-prev" aria-label="上一张">
+    <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <img id="lightbox-img" alt="原始截图">
+  <button class="lb-nav next" id="lb-next" aria-label="下一张">
+    <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+  </button>
+  <div class="lb-count" id="lb-count"></div>
+  <div class="tip">点击任意位置关闭 &nbsp;·&nbsp; ← → 换图</div>
+</div>
+
+<script>
+/* ============================================================
+   交互逻辑
+   1) 点一下 / 空格 / 方向键 → 下一屏；往上滚或按 ← → 上一屏
+   2) 每进一屏，数字会从 0 滚上去，条形图跟着长出来
+   3) 点证据截图 → 看大图（不会误触翻页）
+   ============================================================ */
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total  = slides.length;
+  var cur    = 0;
+  var locked = false;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var edge  = document.getElementById('edge');
+  var stage = document.getElementById('stage');
+  var suppressClick = false;   // 拖过图标之后，紧跟着的那一下点击不算翻页
+
+  /* ---- 数字滚动 ---- */
+  function fmt(v, dec){
+    return dec > 0 ? v.toFixed(dec)
+                   : Math.round(v).toLocaleString('en-US');
+  }
+  function countUp(slide){
+    slide.querySelectorAll('[data-to]').forEach(function(el){
+      var to  = parseFloat(el.dataset.to);
+      var dec = parseInt(el.dataset.dec || '0', 10);
+      var finalText = fmt(to, dec);
+      if (reduce){ el.textContent = finalText; return; }
+      var t0 = 0, dur = 950;
+      function tick(t){
+        if (!t0) t0 = t;
+        var p = Math.min(1, (t - t0) / dur);
+        var e = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(to * e, dec);
+        if (p < 1){ requestAnimationFrame(tick); }
+        else { el.textContent = finalText; }   // 最后一帧一定落回真实值
+      }
+      el.textContent = fmt(0, dec);
+      requestAnimationFrame(tick);
+    });
+  }
+
+  /* ---- 翻到第 i 屏 ---- */
+  function render(){
+    slides.forEach(function(s, i){
+      s.classList.toggle('is-active', i === cur);
+      s.classList.toggle('is-left',  i <  cur);
+    });
+    edge.style.width = ((cur + 1) / total * 100) + '%';
+    document.body.dataset.at = cur;      // 只在源码里记一下当前第几屏，页面上看不到
+    var accent = (slides[cur].style.getPropertyValue('--accent') || '#fff').trim();
+    edge.style.setProperty('--accent', accent);
+    countUp(slides[cur]);
+    // 翻页时把「点开看作品名」的方框收回去
+    slides.forEach(function(s){
+      s.querySelectorAll('.hit.open').forEach(function(x){ x.classList.remove('open'); });
+    });
+    // 翻到软件那一屏 → 图标归位
+    resetIcons();
+  }
+
+  function go(i){
+    i = (i + total) % total;
+    if (i === cur) return;
+    cur = i;
+    render();
+  }
+  function next(){ if (locked) return; go(cur + 1); }
+
+  /* ---- 点击：整页前进，但点「原始截图」不算 ---- */
+  document.addEventListener('click', function(e){
+    if (suppressClick){ suppressClick = false; return; }   // 刚拖过图标，别把这下当成翻页
+    if (e.target.closest('.src-btn')) return;    // 点截图按钮 → 交给它自己处理
+    if (document.getElementById('lightbox').classList.contains('open')) return;
+    next();
+  });
+
+  /* ---- 键盘 ---- */
+  document.addEventListener('keydown', function(e){
+    var lb = document.getElementById('lightbox');
+    if (e.key === 'Escape'){ closeBox(); return; }
+    if (lb.classList.contains('open')){          // 大图开着时，左右键是换图
+      if (e.key === 'ArrowLeft'){ e.preventDefault(); stepBox(-1); }
+      else if (e.key === 'ArrowRight'){ e.preventDefault(); stepBox(1); }
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' ||
+        e.key === 'PageDown' || e.key === 'Enter'){ e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp'){
+      e.preventDefault(); go(cur - 1);
+    }
+    else if (e.key === 'Home'){ e.preventDefault(); go(0); }
+    else if (e.key === 'End'){ e.preventDefault(); go(total - 1); }
+  });
+
+  /* ---- 滚轮 / 触屏滑动 ---- */
+  var wheelLock = false;
+  window.addEventListener('wheel', function(e){
+    if (document.getElementById('lightbox').classList.contains('open')) return;
+    if (wheelLock) return;
+    if (Math.abs(e.deltaY) < 12) return;
+    wheelLock = true;
+    setTimeout(function(){ wheelLock = false; }, 850);
+    if (e.deltaY > 0) next(); else go(cur - 1);
+  }, { passive: true });
+
+  var y0 = null;
+  stage.addEventListener('touchstart', function(e){ y0 = e.touches[0].clientY; }, { passive: true });
+  stage.addEventListener('touchend', function(e){
+    if (y0 === null) return;
+    var dy = y0 - e.changedTouches[0].clientY;
+    y0 = null;
+    if (Math.abs(dy) < 45) return;               // 轻点交给 click 处理
+    if (dy > 0) next(); else go(cur - 1);
+  }, { passive: true });
+
+  /* ---- 角落的「原始截图」：点开看原图，有两张就能左右翻 ---- */
+  var lb    = document.getElementById('lightbox');
+  var lbI   = document.getElementById('lightbox-img');
+  var lbPrev= document.getElementById('lb-prev');
+  var lbNext= document.getElementById('lb-next');
+  var lbNum = document.getElementById('lb-count');
+  var box   = [];    // 当前要看的那组截图
+  var boxAt = 0;
+
+  function showBox(){
+    lbI.src   = box[boxAt];
+    var many  = box.length > 1;
+    lbNum.textContent  = many ? (boxAt + 1) + ' / ' + box.length : '';
+    lbPrev.style.display = many ? '' : 'none';
+    lbNext.style.display = many ? '' : 'none';
+  }
+  function stepBox(d){
+    if (box.length < 2) return;
+    boxAt = (boxAt + d + box.length) % box.length;
+    showBox();
+  }
+  function closeBox(){ lb.classList.remove('open'); lbI.src = ''; box = []; }
+
+  document.querySelectorAll('.src-btn').forEach(function(b){
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      box   = b.dataset.srcs.split(',');
+      boxAt = 0;
+      showBox();
+      lb.classList.add('open');
+    });
+  });
+  /* ---- 爆款方框：电脑上鼠标移上去就有，手机上没有鼠标，改成点一下 ---- */
+  var noHover = window.matchMedia('(hover: none)').matches;
+  document.querySelectorAll('.hit').forEach(function(h){
+    h.addEventListener('click', function(e){
+      if (!noHover) return;              // 电脑上点方框照常翻页
+      e.stopPropagation();
+      var wasOpen = h.classList.contains('open');
+      document.querySelectorAll('.hit.open').forEach(function(x){ x.classList.remove('open'); });
+      if (!wasOpen) h.classList.add('open');
+    });
+  });
+
+  lbPrev.addEventListener('click', function(e){ e.stopPropagation(); stepBox(-1); });
+  lbNext.addEventListener('click', function(e){ e.stopPropagation(); stepBox(1); });
+  lb.addEventListener('click', function(e){
+    if (e.target.closest('.lb-nav')) return;
+    e.stopPropagation();
+    closeBox();
+  });
+  var bx0 = null;                              // 手机上左右滑也能换图
+  lb.addEventListener('touchstart', function(e){ bx0 = e.touches[0].clientX; }, { passive:true });
+  lb.addEventListener('touchend', function(e){
+    if (bx0 === null) return;
+    var dx = bx0 - e.changedTouches[0].clientX;
+    bx0 = null;
+    if (Math.abs(dx) > 45) stepBox(dx > 0 ? 1 : -1);
+  }, { passive:true });
+
+  /* ============================================================
+     软件图标：整页到处跑的小方块
+     ------------------------------------------------------------
+     规则：
+       1) 松手时保留速度 → 会继续滑（惯性），速度按时间衰减
+       2) 撞到屏幕四条边、或者撞到文字（刚体挡板）就弹回来
+       3) 没有重力，所以不会往下掉
+     文字本身是刚体：图标撞上去只会自己弹开，文字一动不动。
+     两个图标叠在一起会互相推开，免得糊成一团。
+     ============================================================ */
+  var iconField = (function(){
+    var field = document.getElementById('field');
+    if (!field) return null;
+    var slideEl = field.closest('.slide');
+    var items = Array.prototype.slice.call(field.querySelectorAll('.app'));
+    var n = items.length;
+    var st = items.map(function(){ return {x:0,y:0,vx:0,vy:0,w:1,h:1,placed:false,drag:false,sc:1}; });
+    var W = 1, H = 1, running = false, last = 0;
+    var solids = [];          // 刚体挡板：文字的位置（相对 field）
+
+    function clamp(s){
+      if (s.x < 0) s.x = 0;
+      if (s.y < 0) s.y = 0;
+      if (s.x > W - s.w) s.x = W - s.w;
+      if (s.y > H - s.h) s.y = H - s.h;
+    }
+    function apply(){
+      for (var i = 0; i < n; i++){
+        var s = st[i];
+        items[i].style.transform =
+          'translate3d(' + s.x.toFixed(2) + 'px,' + s.y.toFixed(2) + 'px,0)' +
+          (s.sc !== 1 ? ' scale(' + s.sc + ')' : '');
+      }
+    }
+
+    /* 图标撞到文字：只把自己推出来 + 弹开，文字不动 */
+    function hitSolids(s){
+      for (var k = 0; k < solids.length; k++){
+        var o = solids[k];
+        var dx = (s.x + s.w/2) - (o.x + o.w/2);
+        var dy = (s.y + s.h/2) - (o.y + o.h/2);
+        var ox = (s.w + o.w)/2 - Math.abs(dx);
+        var oy = (s.h + o.h)/2 - Math.abs(dy);
+        if (ox <= 0 || oy <= 0) continue;
+        if (ox < oy){
+          if (dx < 0){ s.x -= ox; if (s.vx > 0) s.vx = -s.vx * 0.7; }
+          else       { s.x += ox; if (s.vx < 0) s.vx = -s.vx * 0.7; }
+        } else {
+          if (dy < 0){ s.y -= oy; if (s.vy > 0) s.vy = -s.vy * 0.7; }
+          else       { s.y += oy; if (s.vy < 0) s.vy = -s.vy * 0.7; }
+        }
+      }
+    }
+
+    /* 取一块文字的「紧身」挡板
+       ------------------------------------------------------------
+       直接用 getBoundingClientRect() 拿到的是整个 <p> 的框，而 <p> 是块级元素、
+       会占满一整行 —— 那样图标就被一整面看不见的墙挡住，跑不到上下两头。
+       所以这里用 Range 去量「文字本身」的每一行，得到贴着字的矩形。 */
+    function solidRects(el, fr){
+      var r = null, i;
+      try {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        var rects = range.getClientRects();
+        for (i = 0; i < rects.length; i++){
+          var q = rects[i];
+          if (q.width < 1 || q.height < 1) continue;
+          if (!r){ r = {l:q.left, t:q.top, rg:q.right, b:q.bottom}; }
+          else {
+            r.l  = Math.min(r.l,  q.left);
+            r.t  = Math.min(r.t,  q.top);
+            r.rg = Math.max(r.rg, q.right);
+            r.b  = Math.max(r.b,  q.bottom);
+          }
+        }
+      } catch (err){ /* 极老的浏览器不支持就算，退回到整块 */ }
+      if (!r){
+        var b = el.getBoundingClientRect();
+        r = {l:b.left, t:b.top, rg:b.right, b:b.bottom};
+      }
+      return [{x:r.l - fr.left - 6, y:r.t - fr.top - 6,
+               w:(r.rg - r.l) + 12, h:(r.b - r.t) + 12}];
+    }
+
+    /* 量：场地多大、每个图标多大、文字挡板在哪 */
+    function measure(){
+      W = field.clientWidth;  H = field.clientHeight;
+      var fr = field.getBoundingClientRect();
+      solids = [];
+      Array.prototype.slice.call(slideEl.querySelectorAll('[data-solid]')).forEach(function(el){
+        solids = solids.concat(solidRects(el, fr));
+      });
+      var iw = items[0].offsetWidth  || 60;
+      var ih = items[0].offsetHeight || 60;
+      for (var i = 0; i < n; i++){
+        st[i].w = items[i].offsetWidth  || iw;
+        st[i].h = items[i].offsetHeight || ih;
+      }
+    }
+
+    /* 把所有图标从文字里挤出来 */
+    function settle(){
+      for (var i = 0; i < n; i++){
+        for (var pass = 0; pass < 3; pass++){ hitSolids(st[i]); clamp(st[i]); }
+      }
+    }
+
+    /* 摆位：排成一行，放在下方空地上。force = true 时不管之前在哪，一律回到原位 */
+    function place(force){
+      for (var i = 0; i < n; i++){
+        var s = st[i];
+        if (!force && s.placed) continue;
+        var gap = (W - n * s.w) / (n + 1);
+        s.x = Math.max(0, gap * (i + 1) + s.w * i);
+        s.y = H - s.h - Math.max(24, H * 0.09);
+        s.placed = true;
+      }
+      settle();
+    }
+
+    /* 窗口尺寸变了：重新量，但不动已经待着的位置 */
+    function layout(){ measure(); place(false); apply(); }
+
+    /* 回到这一屏时的复位：位置、速度、缩放全部归零 */
+    function reset(){
+      running = false; last = 0;
+      for (var i = 0; i < n; i++){
+        var s = st[i];
+        s.vx = 0; s.vy = 0; s.drag = false; s.sc = 1;
+        items[i].classList.remove('grabbing');
+      }
+      measure();
+      place(true);
+      apply();
+    }
+
+    function start(){
+      if (running) return;
+      running = true; last = 0;
+      requestAnimationFrame(step);
+    }
+    function step(t){
+      if (!last) last = t;
+      var dt = Math.min(0.032, (t - last) / 1000 || 0.016);
+      last = t;
+      var damp = Math.pow(0.45, dt);          // 空气阻力：每秒衰减到 45%
+      var drop = 380 * dt;                    // 再加一点恒定摩擦，慢速时能干脆停住
+      /* 全都没在动了就退出循环（不然会一直空转）。碰撞推开不算「在动」，
+         否则两个图标挨在一起的时候会互相挤，永远停不下来。 */
+      var moving = false;
+      for (var q = 0; q < n; q++){
+        if (st[q].drag || Math.abs(st[q].vx) > 8 || Math.abs(st[q].vy) > 8){ moving = true; break; }
+      }
+      if (!moving){
+        for (var z = 0; z < n; z++){          // 停下来之前再挤一次，免得停在字上
+          hitSolids(st[z]); clamp(st[z]);
+        }
+        apply();
+        running = false; last = 0;
+        return;
+      }
+
+      for (var i = 0; i < n; i++){
+        var s = st[i];
+        if (s.drag) continue;
+        if (Math.abs(s.vx) < 8 && Math.abs(s.vy) < 8){ s.vx = 0; s.vy = 0; continue; }
+        s.vx *= damp; s.vy *= damp;
+        var sp = Math.hypot(s.vx, s.vy);
+        if (sp > 0){
+          var k = Math.max(0, sp - drop) / sp;
+          s.vx *= k; s.vy *= k;
+        }
+        s.x += s.vx * dt; s.y += s.vy * dt;
+        if (s.x < 0){ s.x = 0; s.vx = Math.abs(s.vx) * 0.82; }
+        else if (s.x > W - s.w){ s.x = W - s.w; s.vx = -Math.abs(s.vx) * 0.82; }
+        if (s.y < 0){ s.y = 0; s.vy = Math.abs(s.vy) * 0.82; }
+        else if (s.y > H - s.h){ s.y = H - s.h; s.vy = -Math.abs(s.vy) * 0.82; }
+        for (var ps = 0; ps < 3; ps++){ hitSolids(s); clamp(s); }   // 撞到文字 → 自己弹开，文字不动
+      }
+
+      /* 两个图标压在一起就互相推开 */
+      for (var a = 0; a < n; a++){
+        for (var b = a + 1; b < n; b++){
+          var A = st[a], B = st[b];
+          var dx = (B.x + B.w/2) - (A.x + A.w/2);
+          var dy = (B.y + B.h/2) - (A.y + A.h/2);
+          var ox = (A.w + B.w)/2 - Math.abs(dx);
+          var oy = (A.h + B.h)/2 - Math.abs(dy);
+          if (ox <= 0 || oy <= 0) continue;
+          if (ox < oy){
+            var d = (dx >= 0 ? 1 : -1) * ox / 2;
+            A.x -= d; B.x += d;
+            var t1 = A.vx; A.vx = B.vx * 0.9; B.vx = t1 * 0.9;
+          } else {
+            var d2 = (dy >= 0 ? 1 : -1) * oy / 2;
+            A.y -= d2; B.y += d2;
+            var t2 = A.vy; A.vy = B.vy * 0.9; B.vy = t2 * 0.9;
+          }
+          hitSolids(A); hitSolids(B);
+          clamp(A); clamp(B);
+        }
+      }
+
+      apply();
+      requestAnimationFrame(step);
+    }
+
+    items.forEach(function(el, i){
+      var s = st[i], moved = 0;
+      el.addEventListener('pointerdown', function(e){
+        e.preventDefault();
+        try { el.setPointerCapture(e.pointerId); } catch(err){}
+        s.drag = true; s.sc = 1.12; moved = 0;
+        s.vx = s.vy = 0;
+        s.px = e.clientX; s.py = e.clientY; s.pt = performance.now();
+        el.classList.add('grabbing');
+        apply(); start();
+      });
+      el.addEventListener('pointermove', function(e){
+        if (!s.drag) return;
+        var now = performance.now();
+        var dt = Math.max(8, now - s.pt) / 1000;
+        var dx = e.clientX - s.px, dy = e.clientY - s.py;
+        s.x += dx; s.y += dy;
+        /* 速度 = 位移 / 时间，再做一点平滑，免得太跳 */
+        s.vx = Math.max(-2600, Math.min(2600, s.vx * 0.55 + (dx / dt) * 0.45));
+        s.vy = Math.max(-2600, Math.min(2600, s.vy * 0.55 + (dy / dt) * 0.45));
+        s.px = e.clientX; s.py = e.clientY; s.pt = now;
+        moved += Math.abs(dx) + Math.abs(dy);
+        hitSolids(s);       // 拖着的时候也进不去文字里
+        clamp(s); apply(); start();
+      });
+      function release(){
+        if (!s.drag) return;
+        s.drag = false; s.sc = 1;
+        el.classList.remove('grabbing');
+        if (moved > 6){
+          suppressClick = true;
+          setTimeout(function(){ suppressClick = false; }, 60);
+        }
+        apply(); start();
+      }
+      el.addEventListener('pointerup', release);
+      el.addEventListener('pointercancel', release);
+    });
+
+    layout();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+    window.addEventListener('resize', layout);
+
+    return { slide: slideEl, reset: reset };
+  })();
+
+  /* 每次翻到软件那一屏，都把图标摆回原来的位置 */
+  function resetIcons(){
+    if (iconField && slides[cur] === iconField.slide) iconField.reset();
+  }
+
+  window.addEventListener('resize', function(){ /* 布局靠 CSS，这里不用重算 */ });
+
+  render();
+})();
+</script>
+</body>
+</html>
